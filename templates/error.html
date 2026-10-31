@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="max-w-xl mx-auto px-4 py-24 text-center">
+  <p class="text-6xl font-bold text-indigo-600">{{ code }}</p>
+  <h1 class="mt-4 text-2xl font-semibold text-slate-900">{{ title }}</h1>
+  <p class="mt-2 text-slate-500">{{ message }}</p>
+  <a href="{{ url_for('main.home') }}" class="btn-primary mt-8 inline-flex">Back to home</a>
+</section>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Student Portfolio{% endblock %} | Student Portfolio Manager</title>
+  {# Tailwind is served from static/ (not the CDN) so pages work offline. #}
+  <script src="{{ url_for('static', filename='js/tailwind.js') }}"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Segoe UI"', 'Inter', 'system-ui', '-apple-system', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased">
+
+  <!-- Top navigation -->
+  <header class="bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-30">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="{{ url_for('main.home') }}" class="flex items-center gap-2 font-semibold text-slate-900">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white text-sm font-bold">SP</span>
+        <span class="hidden sm:inline">Student Portfolio</span>
+      </a>
+
+      <button id="nav-toggle" type="button" class="sm:hidden p-2 rounded-md text-slate-600 hover:bg-slate-100" aria-label="Open menu" aria-expanded="false">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <div id="nav-menu" class="hidden sm:flex absolute sm:static top-16 left-0 right-0 bg-white sm:bg-transparent border-b sm:border-0 border-slate-200 flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 p-4 sm:p-0">
+        <a href="{{ url_for('main.home') }}" class="nav-link">Home</a>
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('main.dashboard') }}" class="nav-link">Dashboard</a>
+          <form action="{{ url_for('auth.logout') }}" method="post" class="inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="nav-link w-full text-left">Log out</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="nav-link">Log in</a>
+          <a href="{{ url_for('auth.register') }}" class="btn-primary text-sm">Get started</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="max-w-6xl w-full mx-auto px-4 sm:px-6 mt-4 space-y-2">
+        {% set colors = {
+          'success': 'bg-emerald-50 text-emerald-800 border-emerald-200',
+          'danger':  'bg-rose-50 text-rose-800 border-rose-200',
+          'warning': 'bg-amber-50 text-amber-800 border-amber-200',
+          'info':    'bg-sky-50 text-sky-800 border-sky-200'} %}
+        {% for category, message in messages %}
+          <div class="flash flex items-start justify-between gap-4 border rounded-lg px-4 py-3 text-sm {{ colors.get(category, colors['info']) }}">
+            <span>{{ message }}</span>
+            <button type="button" class="flash-close opacity-60 hover:opacity-100" aria-label="Dismiss">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block footer %}
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 text-sm text-slate-500 flex flex-col sm:flex-row justify-between gap-2">
+      <span>&copy; {{ now_year }} Student Portfolio Management System</span>
+      <span>Built with Flask, SQLite and Tailwind CSS</span>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
