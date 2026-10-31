@@ -1,0 +1,9 @@
+<ul class="compact-list">
+  {% for c in section.data %}
+    <li class="entry">
+      {%- if c.url %}<a href="{{ c.url }}"><b>{{ c.title }}</b></a>{% else %}<b>{{ c.title }}</b>{% endif %}
+      {%- if c.issuer %}, {{ c.issuer }}{% endif %}
+      {% if c.date %}<span class="entry-date-inline">({{ c.date }})</span>{% endif %}
+    </li>
+  {% endfor %}
+</ul>

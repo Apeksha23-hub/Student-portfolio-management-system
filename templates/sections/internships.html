@@ -1,0 +1,11 @@
+{% for i in section.data %}
+  <div class="entry">
+    <div class="entry-head">
+      <div><span class="entry-title">{{ i.role }}</span><span class="entry-sub">, {{ i.company }}</span></div>
+      {% if i.dates %}<span class="entry-date">{{ i.dates }}</span>{% endif %}
+    </div>
+    {% if i.bullets %}
+      <ul>{% for b in i.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+{% endfor %}

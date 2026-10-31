@@ -1,0 +1,12 @@
+<table class="details">
+  {% for label, value in section.data %}
+    <tr>
+      <td class="detail-label">{{ label }}</td>
+      <td>
+        {% if value.startswith("http") %}<a href="{{ value }}">{{ value|pretty_url }}</a>
+        {% elif label == "Email" %}<a href="mailto:{{ value }}">{{ value }}</a>
+        {% else %}{{ value }}{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>

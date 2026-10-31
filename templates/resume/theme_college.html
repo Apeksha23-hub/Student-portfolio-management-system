@@ -1,0 +1,18 @@
+{% extends "resume/base_resume.html" %}
+{# College / Campus: name and contact on the left, optional photo on the right. #}
+{% block header %}
+<header class="header">
+  <div class="header-text">
+    <h1 class="name">{{ user.name }}</h1>
+    {% if profile.headline %}<p class="headline">{{ profile.headline }}</p>{% endif %}
+    <p class="contact">
+      <span><a href="mailto:{{ user.email }}">{{ user.email }}</a></span>
+      {% if profile.phone %}<span>{{ profile.phone }}</span>{% endif %}
+      {% if profile.location %}<span>{{ profile.location }}</span>{% endif %}
+    </p>
+  </div>
+  {% if show_photo %}
+    <img class="photo" src="{{ photo_src }}" alt="Photo of {{ user.name }}">
+  {% endif %}
+</header>
+{% endblock %}

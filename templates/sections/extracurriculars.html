@@ -1,0 +1,7 @@
+<ul class="compact-list">
+  {% for x in section.data %}
+    <li class="entry">
+      {% if x.role %}<b>{{ x.role }}</b>, {% endif %}{{ x.activity }}{% if x.description %}: {{ x.description }}{% endif %}
+    </li>
+  {% endfor %}
+</ul>

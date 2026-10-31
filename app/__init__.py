@@ -57,15 +57,18 @@ def create_app(config_class=Config):
     from app.auth import bp as auth_bp
     from app.main import bp as main_bp
     from app.profile import bp as profile_bp
+    from app.resume import bp as resume_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(profile_bp, url_prefix="/profile")
+    app.register_blueprint(resume_bp, url_prefix="/resume")
 
     # Jinja filters used by several templates.
-    from app.utils import date_range, month_year
+    from app.utils import date_range, month_year, pretty_url
 
     app.jinja_env.filters["month_year"] = month_year
+    app.jinja_env.filters["pretty_url"] = pretty_url
     app.jinja_env.globals["date_range"] = date_range
 
     # Create any missing tables on startup (existing data is untouched).

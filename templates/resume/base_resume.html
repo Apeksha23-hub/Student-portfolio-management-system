@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{# Shared skeleton for every resume theme. Themes override the "header" block. #}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {# The browser uses the title as the default PDF file name. #}
+  <title>{{ user.name }} - Resume</title>
+  {# CSS is inlined so the same HTML works in the browser and in WeasyPrint. #}
+  <style>{{ theme_css|safe }}</style>
+  {% if print_mode %}
+  <style>
+    .print-bar { font: 14px/1.4 "Segoe UI", Arial, sans-serif; background: #312e81; color: #fff;
+                 padding: 12px 16px; display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .print-bar button { background: #fff; color: #312e81; border: 0; border-radius: 6px; padding: 8px 14px;
+                        font-weight: 600; cursor: pointer; }
+    @media print { .print-bar { display: none; } }
+  </style>
+  {% endif %}
+</head>
+<body class="theme-{{ theme_key }}">
+  {% if print_mode %}
+    <div class="print-bar">
+      <span>To save as PDF: press <b>Ctrl + P</b>, set Destination to <b>Save as PDF</b>, paper <b>A4</b>, margins <b>Default</b>, and untick "Headers and footers".</span>
+      <button type="button" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+    <script>window.addEventListener("load", function () { setTimeout(function () { window.print(); }, 400); });</script>
+  {% endif %}
+
+  <div class="page">
+    {% block header %}{% endblock %}
+
+    {% for section in sections %}
+      <section class="section section-{{ section.key }}">
+        <h2 class="section-title">{{ section.title }}</h2>
+        {% include "sections/" ~ section.key ~ ".html" %}
+      </section>
+    {% else %}
+      <p class="empty-note">Nothing to show yet. Add details to your profile or tick some sections.</p>
+    {% endfor %}
+  </div>
+</body>
+</html>

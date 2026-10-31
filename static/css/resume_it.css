@@ -1,0 +1,65 @@
+/* IT / Industry theme: single column, ATS-friendly, one sans-serif font. */
+
+@page { size: A4; margin: 15mm; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: Calibri, Carlito, "Segoe UI", "Liberation Sans", Arial, Helvetica, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.32;
+  color: #111;
+}
+a { color: #1d4ed8; text-decoration: none; }
+
+/* On screen, draw the A4 sheet. In print/PDF, @page handles size and margins. */
+@media screen {
+  body { background: #e5e7eb; padding: 20px 0; }
+  .page { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 15mm;
+          background: #fff; box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15); }
+}
+@media screen and (max-width: 820px) {
+  .page { width: auto; min-height: 0; margin: 0 8px; padding: 8mm; }
+}
+
+.header { text-align: center; margin-bottom: 6pt; }
+.name { margin: 0; font-size: 20pt; font-weight: 700; letter-spacing: 1.5pt; text-transform: uppercase; }
+.headline { margin: 1pt 0 0; font-size: 10.5pt; color: #333; }
+.contact { margin: 3pt 0 0; font-size: 9.5pt; color: #333; }
+.contact span { white-space: nowrap; }
+.contact span + span::before { content: "  |  "; color: #888; white-space: pre; }
+
+.section { margin-top: 7pt; }
+.section-title {
+  margin: 0 0 4pt;
+  padding-bottom: 1.5pt;
+  font-size: 11pt;
+  font-weight: 700;
+  letter-spacing: 0.8pt;
+  text-transform: uppercase;
+  border-bottom: 0.75pt solid #333;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+.entry { margin-bottom: 4.5pt; page-break-inside: avoid; break-inside: avoid; }
+.entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8pt; }
+.entry-title { font-weight: 700; }
+.entry-sub, .entry-tech { color: #333; }
+.entry-tech { font-style: italic; }
+.entry-date { white-space: nowrap; color: #333; }
+.entry-date-inline { color: #444; }
+.entry-links, .entry-meta { font-size: 9.5pt; color: #333; }
+
+ul { margin: 1.5pt 0 0; padding-left: 13pt; }
+li { margin: 0 0 1.2pt; }
+.compact-list { padding-left: 13pt; }
+.compact-list .entry { margin-bottom: 1.5pt; }
+
+.summary { margin: 0; text-align: justify; }
+
+.skills { border-collapse: collapse; }
+.skills td { padding: 0 0 1.5pt; vertical-align: top; }
+.skill-cat { font-weight: 700; padding-right: 8pt !important; white-space: nowrap; }
+
+.empty-note { color: #666; text-align: center; margin-top: 40pt; }

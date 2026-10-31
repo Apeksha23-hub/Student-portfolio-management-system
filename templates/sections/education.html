@@ -1,0 +1,32 @@
+{% if theme.education_style == "table" %}
+  <table class="edu-table">
+    <thead>
+      <tr><th>Qualification</th><th>Institution</th><th>Board / University</th><th>Year</th><th>Score</th></tr>
+    </thead>
+    <tbody>
+      {% for e in section.data %}
+        <tr class="entry">
+          <td><b>{{ e.level }}</b></td>
+          <td>{{ e.institution }}</td>
+          <td>{{ e.board or "-" }}</td>
+          <td class="nowrap">{{ e.end_year or e.years or "-" }}</td>
+          <td class="nowrap"><b>{{ e.score or "-" }}</b></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  {% for e in section.data %}
+    <div class="entry">
+      <div class="entry-head">
+        <div><span class="entry-title">{{ e.level }}</span><span class="entry-sub">, {{ e.institution }}</span></div>
+        {% if e.years %}<span class="entry-date">{{ e.years }}</span>{% endif %}
+      </div>
+      {% if e.board or e.score %}
+        <div class="entry-meta">
+          {{ e.board or "" }}{% if e.board and e.score %} &middot; {% endif %}{% if e.score %}<b>{{ e.score }}</b>{% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endif %}

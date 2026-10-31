@@ -1,0 +1,16 @@
+{% extends "resume/base_resume.html" %}
+{# IT / Industry: centred header, no photo, one line of clickable contact links. #}
+{% block header %}
+<header class="header">
+  <h1 class="name">{{ user.name }}</h1>
+  {% if profile.headline %}<p class="headline">{{ profile.headline }}</p>{% endif %}
+  <p class="contact">
+    {% if profile.location %}<span>{{ profile.location }}</span>{% endif %}
+    {% if profile.phone %}<span>{{ profile.phone }}</span>{% endif %}
+    <span><a href="mailto:{{ user.email }}">{{ user.email }}</a></span>
+    {% if profile.linkedin %}<span><a href="{{ profile.linkedin }}">{{ profile.linkedin|pretty_url }}</a></span>{% endif %}
+    {% if profile.github %}<span><a href="{{ profile.github }}">{{ profile.github|pretty_url }}</a></span>{% endif %}
+    {% if profile.website %}<span><a href="{{ profile.website }}">{{ profile.website|pretty_url }}</a></span>{% endif %}
+  </p>
+</header>
+{% endblock %}

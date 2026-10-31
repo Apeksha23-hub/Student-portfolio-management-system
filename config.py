@@ -33,6 +33,9 @@ class Config:
     ALLOWED_PHOTO_EXTENSIONS = {"jpg", "jpeg", "png"}
     ALLOWED_CERT_EXTENSIONS = {"pdf", "jpg", "jpeg", "png"}
 
+    # "auto" = use WeasyPrint if it loads, else browser print. "browser" = always fallback.
+    PDF_ENGINE = os.environ.get("PDF_ENGINE", "auto")
+
     # AI (Google Gemini free tier). Empty key = AI disabled, app still works.
     GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
     GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")

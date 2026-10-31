@@ -46,8 +46,11 @@
       <p class="font-semibold text-slate-900">Edit profile</p>
       <p class="mt-1 text-sm text-slate-500">Personal details and all sections</p>
     </a>
+    <a href="{{ url_for('resume.generator') }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
+      <p class="font-semibold text-slate-900">Generate resume</p>
+      <p class="mt-1 text-sm text-slate-500">Choose a theme and download PDF</p>
+    </a>
     {% for title, text, phase in [
-      ("Generate resume", "Choose a theme and download PDF", "Phase 3"),
       ("View portfolio", "Your public single-page site", "Phase 4"),
       ("Share settings", "Visibility, link and QR code", "Phase 4")] %}
       <div class="card p-5 btn-disabled" aria-disabled="true">

@@ -1,0 +1,8 @@
+<ul class="compact-list">
+  {% for a in section.data %}
+    <li class="entry">
+      <b>{{ a.title }}</b>{% if a.description %}: {{ a.description }}{% endif %}
+      {% if a.date %}<span class="entry-date-inline">({{ a.date }})</span>{% endif %}
+    </li>
+  {% endfor %}
+</ul>

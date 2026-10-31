@@ -1,0 +1,8 @@
+<table class="skills">
+  {% for category, names in section.data %}
+    <tr>
+      <td class="skill-cat">{{ category }}:</td>
+      <td>{{ names|join(", ") }}</td>
+    </tr>
+  {% endfor %}
+</table>

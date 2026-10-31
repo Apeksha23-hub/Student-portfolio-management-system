@@ -111,6 +111,12 @@ def month_year(value):
     return value.strftime("%b %Y") if value else ""
 
 
+def pretty_url(url):
+    """'https://www.github.com/asha/' -> 'github.com/asha' for display."""
+    text = re.sub(r"^https?://(www\.)?", "", url or "", flags=re.IGNORECASE)
+    return text.rstrip("/")
+
+
 def date_range(start, end):
     """'Jan 2024 - Present', 'Jan 2024 - Jun 2024', or '' when no dates."""
     if isinstance(start, int) or isinstance(end, int):

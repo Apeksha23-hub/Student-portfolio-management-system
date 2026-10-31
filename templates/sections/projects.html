@@ -1,0 +1,21 @@
+{% for p in section.data %}
+  <div class="entry">
+    <div class="entry-head">
+      <div>
+        <span class="entry-title">{{ p.title }}</span>
+        {% if p.tech %}<span class="entry-tech"> | {{ p.tech|join(", ") }}</span>{% endif %}
+      </div>
+      {% if p.dates %}<span class="entry-date">{{ p.dates }}</span>{% endif %}
+    </div>
+    {% if p.github or p.demo %}
+      <div class="entry-links">
+        {% if p.github %}<a href="{{ p.github }}">GitHub: {{ p.github|pretty_url }}</a>{% endif %}
+        {% if p.github and p.demo %} &middot; {% endif %}
+        {% if p.demo %}<a href="{{ p.demo }}">Demo: {{ p.demo|pretty_url }}</a>{% endif %}
+      </div>
+    {% endif %}
+    {% if p.bullets %}
+      <ul>{% for b in p.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+{% endfor %}
