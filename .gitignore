@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local settings and data (never commit secrets or the database)
+.env
+instance/
+*.db
+
+# User uploads (keep the folders, ignore the files)
+static/uploads/photos/*
+static/uploads/certificates/*
+!static/uploads/photos/.gitkeep
+!static/uploads/certificates/.gitkeep
+
+# Test / editor noise
+.pytest_cache/
+.vscode/
+.idea/
