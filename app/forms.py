@@ -201,3 +201,8 @@ class ExtracurricularForm(FlaskForm):
     role = optional_text("Your role", 100, description="e.g. Technical Head")
     description = long_text("Details", 500, rows=3)
     submit = SubmitField("Save")
+
+
+class ShareForm(FlaskForm):
+    is_public = BooleanField("Make my portfolio public")
+    submit = SubmitField("Save")

@@ -58,11 +58,15 @@ def create_app(config_class=Config):
     from app.main import bp as main_bp
     from app.profile import bp as profile_bp
     from app.resume import bp as resume_bp
+    from app.ai import bp as ai_bp
+    from app.portfolio import bp as portfolio_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(profile_bp, url_prefix="/profile")
     app.register_blueprint(resume_bp, url_prefix="/resume")
+    app.register_blueprint(ai_bp, url_prefix="/ai")
+    app.register_blueprint(portfolio_bp)
 
     # Jinja filters used by several templates.
     from app.utils import date_range, month_year, pretty_url

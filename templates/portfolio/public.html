@@ -1,0 +1,281 @@
+{% from "portfolio/_icons.html" import icon %}
+<!DOCTYPE html>
+{#
+  Public portfolio: a standalone single page (it does not use base.html, so
+  visitors do not see the app's login navigation). Light/dark follows the
+  visitor's system setting through Tailwind's dark: classes.
+#}
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ user.name }} | Portfolio</title>
+  {% if profile.headline %}<meta name="description" content="{{ profile.headline }}">{% endif %}
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="{{ url_for('static', filename='js/tailwind.js') }}"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: {
+      sans: ['"Segoe UI"', 'Inter', 'system-ui', '-apple-system', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'] } } } };
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio.css') }}">
+</head>
+{% set about_text = profile.bio or profile.summary %}
+{% set nav = [] %}
+{% if about_text %}{% set _ = nav.append(("about", "About")) %}{% endif %}
+{% if skill_groups %}{% set _ = nav.append(("skills", "Skills")) %}{% endif %}
+{% if projects %}{% set _ = nav.append(("projects", "Projects")) %}{% endif %}
+{% if timeline %}{% set _ = nav.append(("journey", "Journey")) %}{% endif %}
+{% if certifications or achievements %}{% set _ = nav.append(("recognition", "Recognition")) %}{% endif %}
+{% set _ = nav.append(("contact", "Contact")) %}
+<body class="bg-white text-slate-600 dark:bg-slate-950 dark:text-slate-400 antialiased">
+
+  <!-- Top bar -->
+  <header class="sticky top-0 z-30 bg-white/80 dark:bg-slate-950/80 backdrop-blur border-b border-slate-200/70 dark:border-slate-800">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+      <a href="#top" class="font-bold text-slate-900 dark:text-white tracking-tight whitespace-nowrap shrink-0">{{ user.name }}</a>
+      <div class="hidden md:flex gap-1 text-sm">
+        {% for anchor, label in nav %}
+          <a href="#{{ anchor }}" class="px-3 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white whitespace-nowrap">{{ label }}</a>
+        {% endfor %}
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section id="top" class="relative overflow-hidden">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 grid md:grid-cols-[1fr_auto] gap-12 items-center">
+      <div class="reveal">
+        <p class="inline-flex items-center gap-2 rounded-full border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Portfolio
+        </p>
+        <h1 class="mt-5 text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white">{{ user.name }}</h1>
+        {% if profile.headline %}
+          <p class="mt-4 text-lg sm:text-2xl font-medium gradient-text">{{ profile.headline }}</p>
+        {% endif %}
+        {% if profile.location %}
+          <p class="mt-4 inline-flex items-center gap-1.5 text-sm">{{ icon("pin") }} {{ profile.location }}</p>
+        {% endif %}
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#contact" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition">
+            {{ icon("mail") }} Get in touch
+          </a>
+          {% for url, name, label in [(profile.github, "github", "GitHub"), (profile.linkedin, "linkedin", "LinkedIn"), (profile.website, "globe", "Website")] if url %}
+            <a href="{{ url }}" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-0.5 transition">
+              {{ icon(name) }} {{ label }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="reveal justify-self-center">
+        {% if profile.photo_path %}
+          <img src="{{ url_for('static', filename=profile.photo_path) }}" alt="Photo of {{ user.name }}"
+               class="h-52 w-52 sm:h-64 sm:w-64 rounded-[2rem] object-cover shadow-2xl ring-4 ring-white dark:ring-slate-900 rotate-2 hover:rotate-0 transition duration-500">
+        {% else %}
+          <div class="h-52 w-52 sm:h-64 sm:w-64 rounded-[2rem] shadow-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 flex items-center justify-center text-7xl font-extrabold text-white rotate-2 hover:rotate-0 transition duration-500" aria-hidden="true">
+            {{ user.name.split()|map("first")|join("")|upper|truncate(2, True, "") }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  {% if about_text %}
+  <section id="about" class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <div class="grid lg:grid-cols-[1fr_1fr] gap-10 items-start">
+      <div class="reveal">
+        <p class="section-kicker">About</p>
+        <h2 class="section-heading">A little about me</h2>
+        <p class="mt-5 text-base leading-relaxed whitespace-pre-line">{{ about_text }}</p>
+        {% if profile.bio and profile.summary %}
+          <p class="mt-4 text-base leading-relaxed">{{ profile.summary }}</p>
+        {% endif %}
+      </div>
+      <div class="reveal grid grid-cols-2 gap-4">
+        {% for label, value in stats %}
+          <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-6">
+            <p class="text-4xl font-extrabold text-slate-900 dark:text-white">{{ value }}</p>
+            <p class="mt-1 text-sm">{{ label }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Skills -->
+  {% if skill_groups %}
+  <section id="skills" class="bg-slate-50 dark:bg-slate-900/50 border-y border-slate-200/70 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+      <div class="reveal">
+        <p class="section-kicker">Skills</p>
+        <h2 class="section-heading">What I work with</h2>
+      </div>
+      <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for category, skills in skill_groups %}
+          <div class="reveal rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+            <h3 class="font-semibold text-slate-900 dark:text-white">{{ category }}</h3>
+            <ul class="mt-4 space-y-3">
+              {% for s in skills %}
+                <li>
+                  <div class="flex justify-between text-sm">
+                    <span class="font-medium text-slate-700 dark:text-slate-200">{{ s.name }}</span>
+                    <span class="text-xs">{{ s.level }}</span>
+                  </div>
+                  <div class="mt-1.5 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                    <div class="skill-bar h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500" style="--w: {{ s.percent }}%"></div>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Projects -->
+  {% if projects %}
+  <section id="projects" class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <div class="reveal">
+      <p class="section-kicker">Projects</p>
+      <h2 class="section-heading">Things I have built</h2>
+    </div>
+    <div class="mt-10 grid md:grid-cols-2 gap-6">
+      {% for p in projects %}
+        <article class="reveal group flex flex-col rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5 hover:border-indigo-200 dark:hover:border-indigo-900 transition duration-300">
+          <div class="flex items-start justify-between gap-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">{{ p.title }}</h3>
+            {% if p.dates %}<span class="text-xs whitespace-nowrap mt-1.5">{{ p.dates }}</span>{% endif %}
+          </div>
+          {% if p.bullets %}
+            <ul class="mt-3 space-y-1.5 text-sm leading-relaxed list-disc pl-5 marker:text-indigo-400">
+              {% for b in p.bullets %}<li>{{ b }}</li>{% endfor %}
+            </ul>
+          {% elif p.description %}
+            <p class="mt-3 text-sm leading-relaxed">{{ p.description }}</p>
+          {% endif %}
+          {% if p.tech %}
+            <div class="mt-4 flex flex-wrap gap-2">
+              {% for t in p.tech %}
+                <span class="rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 px-2.5 py-0.5 text-xs font-medium">{{ t }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if p.github or p.demo %}
+            <div class="mt-auto pt-5 flex gap-4 text-sm font-semibold">
+              {% if p.github %}<a href="{{ p.github }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-slate-700 dark:text-slate-200 hover:text-indigo-600">{{ icon("github") }} Code</a>{% endif %}
+              {% if p.demo %}<a href="{{ p.demo }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-slate-700 dark:text-slate-200 hover:text-indigo-600">{{ icon("external") }} Live demo</a>{% endif %}
+            </div>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Education and internship timeline -->
+  {% if timeline %}
+  <section id="journey" class="bg-slate-50 dark:bg-slate-900/50 border-y border-slate-200/70 dark:border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+      <div class="reveal">
+        <p class="section-kicker">Journey</p>
+        <h2 class="section-heading">Education and experience</h2>
+      </div>
+      <ol class="mt-10 relative border-l-2 border-slate-200 dark:border-slate-800 ml-3 space-y-8">
+        {% for item in timeline %}
+          <li class="reveal relative pl-8">
+            <span class="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full ring-4 ring-slate-50 dark:ring-slate-950 {{ 'bg-violet-500' if item.kind == 'Internship' else 'bg-indigo-500' }}"></span>
+            <div class="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5">
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="rounded-full px-2 py-0.5 font-semibold {{ 'bg-violet-50 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300' if item.kind == 'Internship' else 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' }}">{{ item.kind }}</span>
+                {% if item.dates %}<span>{{ item.dates }}</span>{% endif %}
+              </div>
+              <h3 class="mt-2 font-bold text-slate-900 dark:text-white">{{ item.title }}</h3>
+              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ item.org }}</p>
+              {% if item.details %}
+                <ul class="mt-3 space-y-1 text-sm list-disc pl-5 marker:text-slate-400">
+                  {% for d in item.details %}<li>{{ d }}</li>{% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Certifications and achievements -->
+  {% if certifications or achievements %}
+  <section id="recognition" class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <div class="reveal">
+      <p class="section-kicker">Recognition</p>
+      <h2 class="section-heading">Certifications and achievements</h2>
+    </div>
+    <div class="mt-10 grid lg:grid-cols-2 gap-10">
+      {% if certifications %}
+        <div class="space-y-4">
+          <h3 class="reveal font-semibold text-slate-900 dark:text-white">Certifications</h3>
+          {% for c in certifications %}
+            <div class="reveal flex gap-4 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+              <span class="shrink-0 h-10 w-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 flex items-center justify-center">{{ icon("badge", "h-5 w-5") }}</span>
+              <div class="min-w-0">
+                <p class="font-semibold text-slate-900 dark:text-white">{{ c.title }}</p>
+                <p class="text-sm">{{ [c.issuer, c.date]|select|join(" · ") }}</p>
+                <div class="mt-1 flex gap-4 text-sm font-semibold">
+                  {% if c.url %}<a href="{{ c.url }}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 dark:text-indigo-400 hover:underline">View credential</a>{% endif %}
+                  {% if c.file %}<a href="{{ url_for('static', filename=c.file) }}" target="_blank" rel="noopener" class="text-indigo-600 dark:text-indigo-400 hover:underline">Certificate file</a>{% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if achievements %}
+        <div class="space-y-4">
+          <h3 class="reveal font-semibold text-slate-900 dark:text-white">Achievements</h3>
+          {% for a in achievements %}
+            <div class="reveal flex gap-4 rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+              <span class="shrink-0 h-10 w-10 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-300 flex items-center justify-center">{{ icon("trophy", "h-5 w-5") }}</span>
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">{{ a.title }}</p>
+                {% if a.description %}<p class="text-sm">{{ a.description }}</p>{% endif %}
+                {% if a.date %}<p class="mt-1 text-xs">{{ a.date }}</p>{% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Contact (phone is intentionally never shown publicly) -->
+  <section id="contact" class="max-w-6xl mx-auto px-4 sm:px-6 pb-20 pt-4">
+    <div class="reveal relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 px-6 py-14 sm:px-14 text-center text-white">
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Let's connect</h2>
+      <p class="mt-3 text-indigo-100 max-w-xl mx-auto">Open to internships, projects and collaboration. Reach out by email or find me online.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="mailto:{{ user.email }}" class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-indigo-700 hover:bg-indigo-50 transition">{{ icon("mail") }} {{ user.email }}</a>
+        {% for url, name, label in [(profile.linkedin, "linkedin", "LinkedIn"), (profile.github, "github", "GitHub"), (profile.website, "globe", "Website")] if url %}
+          <a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg border border-white/40 px-5 py-2.5 text-sm font-semibold hover:bg-white/10 transition">{{ icon(name) }} {{ label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-slate-200 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 text-xs flex flex-col sm:flex-row justify-between gap-2">
+      <span>&copy; {{ now_year }} {{ user.name }}</span>
+      <span>Made with Student Portfolio Management System</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
+</body>
+</html>

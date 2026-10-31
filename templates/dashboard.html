@@ -50,17 +50,25 @@
       <p class="font-semibold text-slate-900">Generate resume</p>
       <p class="mt-1 text-sm text-slate-500">Choose a theme and download PDF</p>
     </a>
-    {% for title, text, phase in [
-      ("View portfolio", "Your public single-page site", "Phase 4"),
-      ("Share settings", "Visibility, link and QR code", "Phase 4")] %}
-      <div class="card p-5 btn-disabled" aria-disabled="true">
+    {% if current_user.profile.is_public %}
+      <a href="{{ url_for('portfolio.public', slug=current_user.profile.public_slug) }}" target="_blank" rel="noopener"
+         class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
+        <p class="font-semibold text-slate-900">View portfolio</p>
+        <p class="mt-1 text-sm text-slate-500">Your public single-page site</p>
+      </a>
+    {% else %}
+      <a href="{{ url_for('portfolio.share') }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
         <div class="flex items-center justify-between">
-          <p class="font-semibold text-slate-900">{{ title }}</p>
-          <span class="badge">{{ phase }}</span>
+          <p class="font-semibold text-slate-900">View portfolio</p>
+          <span class="badge">Private</span>
         </div>
-        <p class="mt-1 text-sm text-slate-500">{{ text }}</p>
-      </div>
-    {% endfor %}
+        <p class="mt-1 text-sm text-slate-500">Make it public in Share settings first</p>
+      </a>
+    {% endif %}
+    <a href="{{ url_for('portfolio.share') }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
+      <p class="font-semibold text-slate-900">Share settings</p>
+      <p class="mt-1 text-sm text-slate-500">Visibility, link and QR code</p>
+    </a>
     {% endblock %}
   </div>
 

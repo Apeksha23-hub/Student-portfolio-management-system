@@ -14,7 +14,21 @@
       </p>
     {% endif %}
 
-    {% block ai_tools %}{% endblock %}
+    {% if module_name == "projects" %}
+      {% with ai_url=url_for('ai.improve'), ai_kind="project", ai_fields="title,tech_stack,description",
+              ai_target="bullets_text", ai_title="Improve with AI",
+              ai_help="Turns your description into 2-3 resume bullets. Nothing is saved until you click Save.",
+              ai_button="Improve with AI" %}
+        {% include "modules/_ai_panel.html" %}
+      {% endwith %}
+    {% elif module_name == "internships" %}
+      {% with ai_url=url_for('ai.improve'), ai_kind="internship", ai_fields="role,company,description",
+              ai_target="bullets_text", ai_title="Improve with AI",
+              ai_help="Turns your description into 2-3 resume bullets. Nothing is saved until you click Save.",
+              ai_button="Improve with AI" %}
+        {% include "modules/_ai_panel.html" %}
+      {% endwith %}
+    {% endif %}
 
     <div class="flex gap-3">
       {{ form.submit(class="btn-primary") }}
@@ -22,4 +36,10 @@
     </div>
   </form>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  {% if module_name in ("projects", "internships") %}
+    <script src="{{ url_for('static', filename='js/ai.js') }}"></script>
+  {% endif %}
 {% endblock %}

@@ -20,9 +20,18 @@
     {{ form.hidden_tag() }}
     {% include "modules/_fields.html" %}
 
-    {% block ai_tools %}{% endblock %}
+    {% with ai_url=url_for('ai.summary'), ai_kind="summary", ai_fields="", ai_target="summary",
+            ai_title="Generate summary with AI",
+            ai_help="Uses your saved skills, projects and education. Nothing is saved until you click Save.",
+            ai_button="Generate summary" %}
+      {% include "modules/_ai_panel.html" %}
+    {% endwith %}
 
     {{ form.submit(class="btn-primary") }}
   </form>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/ai.js') }}"></script>
 {% endblock %}

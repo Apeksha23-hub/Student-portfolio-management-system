@@ -1,0 +1,59 @@
+/* Extra styles for the public portfolio that Tailwind classes do not cover. */
+
+.section-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6366f1;
+}
+.section-heading {
+  margin-top: 0.5rem;
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+.gradient-text {
+  background: linear-gradient(90deg, #4f46e5, #9333ea, #db2777);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@media (prefers-color-scheme: dark) {
+  .section-heading { color: #fff; }
+  .section-kicker { color: #818cf8; }
+  .gradient-text { background-image: linear-gradient(90deg, #818cf8, #c084fc, #f472b6); }
+}
+
+/* Soft coloured blobs behind the hero. */
+.hero-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.hero-blob-1 { width: 26rem; height: 26rem; background: #818cf8; top: -8rem; right: -6rem; }
+.hero-blob-2 { width: 20rem; height: 20rem; background: #f0abfc; bottom: -10rem; left: -6rem; }
+@media (prefers-color-scheme: dark) { .hero-blob { opacity: 0.18; } }
+
+/* Fade-in-on-scroll. Only applied when JavaScript runs ("js" class on <html>),
+   so content is always visible without JavaScript. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+/* Skill bars grow to their width when visible. */
+.skill-bar { width: var(--w); }
+.js .skill-bar { width: 0; transition: width 1s ease 0.2s; }
+.js .is-visible .skill-bar { width: var(--w); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal, .js .skill-bar { transition: none; opacity: 1; transform: none; }
+  .js .skill-bar { width: var(--w); }
+}
