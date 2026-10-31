@@ -1,0 +1,25 @@
+{% extends "modules/_layout.html" %}
+{% block title %}{{ "Edit" if item else "Add" }} {{ module.singular }}{% endblock %}
+{% block module_body %}
+<div class="card p-6 sm:p-8">
+  <h1 class="text-2xl font-bold text-slate-900">{{ "Edit" if item else "Add" }} {{ module.singular }}</h1>
+
+  <form method="post" enctype="multipart/form-data" novalidate class="mt-6 space-y-6">
+    {{ form.hidden_tag() }}
+    {% include "modules/_fields.html" %}
+
+    {% if module_name == 'certifications' and item and item.file_path %}
+      <p class="text-sm text-slate-600">Current file:
+        <a href="{{ url_for('static', filename=item.file_path) }}" target="_blank" rel="noopener" class="link">open</a>
+      </p>
+    {% endif %}
+
+    {% block ai_tools %}{% endblock %}
+
+    <div class="flex gap-3">
+      {{ form.submit(class="btn-primary") }}
+      <a href="{{ url_for('profile.list_items', module_name=module_name) }}" class="btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

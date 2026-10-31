@@ -56,9 +56,17 @@ def create_app(config_class=Config):
     # Register blueprints (one per feature area).
     from app.auth import bp as auth_bp
     from app.main import bp as main_bp
+    from app.profile import bp as profile_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(profile_bp, url_prefix="/profile")
+
+    # Jinja filters used by several templates.
+    from app.utils import date_range, month_year
+
+    app.jinja_env.filters["month_year"] = month_year
+    app.jinja_env.globals["date_range"] = date_range
 
     # Create any missing tables on startup (existing data is untouched).
     with app.app_context():

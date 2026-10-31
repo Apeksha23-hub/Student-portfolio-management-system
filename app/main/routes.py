@@ -2,6 +2,8 @@
 from flask import Blueprint, render_template
 from flask_login import current_user, login_required
 
+from app.utils import profile_completeness
+
 bp = Blueprint("main", __name__)
 
 
@@ -14,16 +16,23 @@ def home():
 @login_required
 def dashboard():
     # Number of saved entries in each profile section.
-    counts = {
-        "Education": current_user.education.count(),
-        "Skills": current_user.skills.count(),
-        "Certifications": current_user.certifications.count(),
-        "Projects": current_user.projects.count(),
-        "Internships": current_user.internships.count(),
-        "Achievements": current_user.achievements.count(),
-        "Extracurriculars": current_user.extracurriculars.count(),
-    }
-    return render_template("dashboard.html", counts=counts)
+    from app.profile.routes import MODULES
+
+    # Number of saved entries in each profile section.
+    counts = [
+        (name, module["title"], getattr(current_user, module["relation"]).count())
+        for name, module in MODULES.items()
+    ]
+    percent, missing = profile_completeness(current_user)
+    return render_template("dashboard.html", counts=counts, percent=percent, missing=missing)
+
+
+@bp.app_errorhandler(403)
+def forbidden(error):
+    return render_template(
+        "error.html", code=403, title="Not allowed",
+        message="You can only view or change your own records.",
+    ), 403
 
 
 @bp.app_errorhandler(404)

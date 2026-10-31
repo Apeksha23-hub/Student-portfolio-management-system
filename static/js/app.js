@@ -19,3 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+// Ask before submitting forms marked with data-confirm (e.g. delete buttons).
+document.addEventListener("submit", function (event) {
+  var message = event.target.getAttribute("data-confirm");
+  if (message && !window.confirm(message)) {
+    event.preventDefault();
+  }
+});

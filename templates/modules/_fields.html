@@ -1,0 +1,15 @@
+{# Renders every visible field of a form in a two-column grid. Expects: form #}
+{% from "macros.html" import field, checkbox %}
+<div class="grid sm:grid-cols-2 gap-5">
+  {% for f in form if f.type not in ("CSRFTokenField", "SubmitField", "HiddenField") %}
+    {% if f.type == "BooleanField" %}
+      <div class="sm:col-span-2">{{ checkbox(f) }}</div>
+    {% elif f.type == "TextAreaField" %}
+      <div class="sm:col-span-2" id="wrap-{{ f.name }}">{{ field(f) }}</div>
+    {% elif f.type == "FileField" %}
+      <div class="sm:col-span-2">{{ field(f, type_class="block w-full text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-indigo-50 file:px-3 file:py-2 file:text-indigo-700 file:font-semibold") }}</div>
+    {% else %}
+      <div>{{ field(f) }}</div>
+    {% endif %}
+  {% endfor %}
+</div>
