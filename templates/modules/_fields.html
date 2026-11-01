@@ -7,7 +7,9 @@
     {% elif f.type == "TextAreaField" %}
       <div class="sm:col-span-2" id="wrap-{{ f.name }}">{{ field(f) }}</div>
     {% elif f.type == "FileField" %}
-      <div class="sm:col-span-2">{{ field(f, type_class="block w-full text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-indigo-50 file:px-3 file:py-2 file:text-indigo-700 file:font-semibold") }}</div>
+      <div class="sm:col-span-2">
+        {{ field(f, type_class="input-file") }}
+      </div>
     {% else %}
       <div>{{ field(f) }}</div>
     {% endif %}

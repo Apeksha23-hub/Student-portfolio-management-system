@@ -1,31 +1,49 @@
 {% extends "modules/_layout.html" %}
 {% block title %}{{ module.title }}{% endblock %}
 {% block module_body %}
+
 <div class="flex items-center justify-between gap-4">
-  <h1 class="text-2xl font-bold text-slate-900">{{ module.title }}</h1>
-  <a href="{{ url_for('profile.add_item', module_name=module_name) }}" class="btn-primary">+ Add {{ module.singular }}</a>
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+    {{ module.title }}
+  </h1>
+  <a href="{{ url_for('profile.add_item', module_name=module_name) }}" class="btn-primary">
+    + Add {{ module.singular }}
+  </a>
 </div>
 
 {% if rows %}
   <ul class="mt-6 space-y-3">
     {% for item, (title, subtitle, meta) in rows %}
-      <li class="card p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+      <li class="card-cream p-5 flex flex-col sm:flex-row sm:items-start justify-between gap-4
+                 rounded-xl border transition"
+          style="border-color: rgba(47,93,76,0.15);">
         <div class="min-w-0">
-          <p class="font-semibold text-slate-900">
+          <p class="font-semibold" style="color: var(--forest);">
             {{ title }}
             {% if module_name == 'projects' and not item.include_in_resume %}
-              <span class="badge ml-2 !bg-slate-100 !text-slate-600">Hidden from resume</span>
+              <span class="badge ml-2" style="background: var(--sage-bg); color: var(--color-muted);">
+                Hidden from resume
+              </span>
             {% endif %}
           </p>
-          {% if subtitle %}<p class="text-sm text-slate-600 mt-0.5 line-clamp-2">{{ subtitle }}</p>{% endif %}
-          {% if meta %}<p class="text-xs text-slate-500 mt-1">{{ meta }}</p>{% endif %}
+          {% if subtitle %}
+            <p class="text-sm mt-0.5 line-clamp-2" style="color: var(--color-muted);">{{ subtitle }}</p>
+          {% endif %}
+          {% if meta %}
+            <p class="text-xs mt-1" style="color: var(--color-muted);">{{ meta }}</p>
+          {% endif %}
           {% if module_name == 'certifications' and item.file_path %}
-            <a href="{{ url_for('static', filename=item.file_path) }}" target="_blank" rel="noopener" class="link text-xs mt-1 inline-block">View uploaded file</a>
+            <a href="{{ url_for('static', filename=item.file_path) }}"
+               target="_blank" rel="noopener" class="link text-xs mt-1 inline-block">
+              View uploaded file
+            </a>
           {% endif %}
         </div>
         <div class="flex gap-2 shrink-0">
-          <a href="{{ url_for('profile.edit_item', module_name=module_name, item_id=item.id) }}" class="btn-secondary">Edit</a>
-          <form method="post" action="{{ url_for('profile.delete_item', module_name=module_name, item_id=item.id) }}"
+          <a href="{{ url_for('profile.edit_item', module_name=module_name, item_id=item.id) }}"
+             class="btn-secondary">Edit</a>
+          <form method="post"
+                action="{{ url_for('profile.delete_item', module_name=module_name, item_id=item.id) }}"
                 data-confirm="Delete this {{ module.singular }}? This cannot be undone.">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn-danger">Delete</button>
@@ -36,8 +54,12 @@
   </ul>
 {% else %}
   <div class="mt-6 card p-10 text-center">
-    <p class="text-slate-600">No {{ module.title|lower }} added yet.</p>
-    <a href="{{ url_for('profile.add_item', module_name=module_name) }}" class="btn-primary mt-4">Add your first {{ module.singular }}</a>
+    <p style="color: var(--color-muted);">No {{ module.title|lower }} added yet.</p>
+    <a href="{{ url_for('profile.add_item', module_name=module_name) }}"
+       class="btn-primary mt-4 inline-flex">
+      Add your first {{ module.singular }}
+    </a>
   </div>
 {% endif %}
+
 {% endblock %}

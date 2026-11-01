@@ -2,85 +2,105 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+
+  <!-- Page header -->
   <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
     <div>
-      <p class="text-sm text-slate-500">Dashboard</p>
-      <h1 class="text-3xl font-bold text-slate-900">Hello, {{ current_user.name }}</h1>
+      <p class="text-sm" style="color: var(--color-muted);">Dashboard</p>
+      <h1 class="text-3xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+        Hello, {{ current_user.name }}
+      </h1>
     </div>
-    <span class="badge self-start sm:self-auto">
+    <span class="badge self-start sm:self-auto
+                 {% if current_user.profile.is_public %}badge-success{% endif %}">
       Portfolio: {{ "Public" if current_user.profile.is_public else "Private" }}
     </span>
   </div>
 
   <!-- Profile completeness -->
-  <div class="mt-8 card p-6">
-    <div class="flex items-center justify-between">
-      <p class="font-semibold text-slate-900">Profile completeness</p>
-      <p class="text-sm font-bold {{ 'text-emerald-600' if percent == 100 else 'text-indigo-600' }}">{{ percent }}%</p>
+  <div class="mt-8 card-cream p-6">
+    <div class="flex items-center justify-between gap-4">
+      <p class="font-semibold" style="color: var(--forest);">Profile completeness</p>
+      <p class="text-sm font-bold" style="color: {% if percent == 100 %}var(--moss){% else %}var(--burgundy){% endif %};">
+        {{ percent }}%
+      </p>
     </div>
-    <div class="mt-3 h-3 w-full rounded-full bg-slate-100 overflow-hidden" role="progressbar"
-         aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100">
-      <div class="h-3 rounded-full {{ 'bg-emerald-500' if percent == 100 else 'bg-indigo-600' }} transition-all" style="width: {{ percent }}%"></div>
+
+    <div class="mt-3 progress-track"
+         role="progressbar" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"
+         aria-label="Profile completeness: {{ percent }}%">
+      <div class="progress-fill {% if percent == 100 %}complete{% endif %}"
+           style="width: {{ percent }}%;"></div>
     </div>
+
     {% if missing %}
-      <p class="mt-4 text-sm text-slate-500">Next steps:</p>
+      <p class="mt-4 text-sm" style="color: var(--color-muted);">Next steps:</p>
       <ul class="mt-2 flex flex-wrap gap-2">
         {% for tip, module in missing[:5] %}
           <li>
             <a href="{{ url_for('profile.list_items', module_name=module) if module else url_for('profile.edit_profile') }}"
-               class="inline-block text-xs px-3 py-1.5 rounded-full border border-slate-200 text-slate-700 hover:border-indigo-300 hover:text-indigo-700">
+               class="inline-block text-xs px-3 py-1.5 rounded-full border transition"
+               style="border-color: rgba(47,93,76,0.25); color: var(--forest); background: var(--sage-bg);"
+               onmouseover="this.style.borderColor='var(--rose)'; this.style.background='var(--blush)';"
+               onmouseout="this.style.borderColor='rgba(47,93,76,0.25)'; this.style.background='var(--sage-bg)';">
               {{ tip }}
             </a>
           </li>
         {% endfor %}
       </ul>
     {% else %}
-      <p class="mt-3 text-sm text-emerald-700">Your profile is complete.</p>
+      <p class="mt-3 text-sm font-medium" style="color: var(--moss);">&#10003; Your profile is complete.</p>
     {% endif %}
   </div>
 
   <!-- Quick links -->
   <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
     {% block quick_links %}
-    <a href="{{ url_for('profile.edit_profile') }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
-      <p class="font-semibold text-slate-900">Edit profile</p>
-      <p class="mt-1 text-sm text-slate-500">Personal details and all sections</p>
+    <a href="{{ url_for('profile.edit_profile') }}" class="stat-card block">
+      <p class="font-semibold" style="color: var(--forest);">Edit profile</p>
+      <p class="mt-1 text-sm" style="color: var(--color-muted);">Personal details and all sections</p>
     </a>
-    <a href="{{ url_for('resume.generator') }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
-      <p class="font-semibold text-slate-900">Generate resume</p>
-      <p class="mt-1 text-sm text-slate-500">Choose a theme and download PDF</p>
+    <a href="{{ url_for('resume.generator') }}" class="stat-card sage block">
+      <p class="font-semibold" style="color: var(--forest);">Generate resume</p>
+      <p class="mt-1 text-sm" style="color: var(--color-muted);">Choose a theme and download PDF</p>
     </a>
     {% if current_user.profile.is_public %}
-      <a href="{{ url_for('portfolio.public', slug=current_user.profile.public_slug) }}" target="_blank" rel="noopener"
-         class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
-        <p class="font-semibold text-slate-900">View portfolio</p>
-        <p class="mt-1 text-sm text-slate-500">Your public single-page site</p>
+      <a href="{{ url_for('portfolio.public', slug=current_user.profile.public_slug) }}"
+         target="_blank" rel="noopener" class="stat-card block">
+        <p class="font-semibold" style="color: var(--forest);">View portfolio</p>
+        <p class="mt-1 text-sm" style="color: var(--color-muted);">Your public single-page site</p>
       </a>
     {% else %}
-      <a href="{{ url_for('portfolio.share') }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
-        <div class="flex items-center justify-between">
-          <p class="font-semibold text-slate-900">View portfolio</p>
-          <span class="badge">Private</span>
+      <a href="{{ url_for('portfolio.share') }}" class="stat-card sage block">
+        <div class="flex items-center justify-between gap-2">
+          <p class="font-semibold" style="color: var(--forest);">View portfolio</p>
+          <span class="badge badge-private">Private</span>
         </div>
-        <p class="mt-1 text-sm text-slate-500">Make it public in Share settings first</p>
+        <p class="mt-1 text-sm" style="color: var(--color-muted);">Make it public in Share settings first</p>
       </a>
     {% endif %}
-    <a href="{{ url_for('portfolio.share') }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
-      <p class="font-semibold text-slate-900">Share settings</p>
-      <p class="mt-1 text-sm text-slate-500">Visibility, link and QR code</p>
+    <a href="{{ url_for('portfolio.share') }}" class="stat-card block">
+      <p class="font-semibold" style="color: var(--forest);">Share settings</p>
+      <p class="mt-1 text-sm" style="color: var(--color-muted);">Visibility, link and QR code</p>
     </a>
     {% endblock %}
   </div>
 
   <!-- Section counts -->
-  <h2 class="mt-12 text-lg font-semibold text-slate-900">Your sections</h2>
+  <h2 class="mt-12 text-lg font-semibold" style="font-family: var(--font-heading); color: var(--forest);">
+    Your sections
+  </h2>
   <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
     {% for name, title, count in counts %}
-      <a href="{{ url_for('profile.list_items', module_name=name) }}" class="card p-5 hover:border-indigo-300 hover:shadow-md transition">
-        <p class="text-sm text-slate-500">{{ title }}</p>
-        <p class="mt-1 text-3xl font-bold text-slate-900">{{ count }}</p>
+      <a href="{{ url_for('profile.list_items', module_name=name) }}"
+         class="stat-card {% if loop.index is odd %}sage{% endif %} block text-center sm:text-left">
+        <p class="text-sm" style="color: var(--color-muted);">{{ title }}</p>
+        <p class="mt-1 text-3xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+          {{ count }}
+        </p>
       </a>
     {% endfor %}
   </div>
+
 </section>
 {% endblock %}

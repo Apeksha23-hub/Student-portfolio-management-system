@@ -2,18 +2,20 @@
 
 {% macro field(f, placeholder="", type_class="input") %}
   <div class="space-y-1">
-    {{ f.label(class="block text-sm font-medium text-slate-700") }}
+    {{ f.label(class="block text-sm font-medium", style="color: var(--forest);") }}
     {{ f(class=type_class ~ (" input-error" if f.errors else ""), placeholder=placeholder, **kwargs) }}
-    {% if f.description %}<p class="text-xs text-slate-500">{{ f.description }}</p>{% endif %}
+    {% if f.description %}
+      <p class="text-xs" style="color: var(--color-muted);">{{ f.description }}</p>
+    {% endif %}
     {% for error in f.errors %}
-      <p class="text-xs text-rose-600">{{ error }}</p>
+      <p class="text-xs font-semibold" style="color: var(--color-error);">&#9888; {{ error }}</p>
     {% endfor %}
   </div>
 {% endmacro %}
 
 {% macro checkbox(f) %}
-  <label class="inline-flex items-center gap-2 text-sm text-slate-700">
-    {{ f(class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500") }}
+  <label class="inline-flex items-center gap-2 text-sm" style="color: var(--forest);">
+    {{ f(class="h-4 w-4 rounded", style="accent-color: var(--forest);") }}
     {{ f.label.text }}
   </label>
 {% endmacro %}

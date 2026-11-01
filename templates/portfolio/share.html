@@ -2,61 +2,82 @@
 {% block title %}Share settings{% endblock %}
 {% block content %}
 <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-  <h1 class="text-3xl font-bold text-slate-900">Share settings</h1>
-  <p class="mt-1 text-slate-500">Control who can see your portfolio and share it with a link or QR code.</p>
+
+  <h1 class="text-3xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+    Share settings
+  </h1>
+  <p class="mt-1" style="color: var(--color-muted);">
+    Control who can see your portfolio and share it with a link or QR code.
+  </p>
 
   <div class="mt-8 grid md:grid-cols-[1fr_auto] gap-6 items-start">
+
     <div class="space-y-6">
-      <!-- Visibility -->
-      <form method="post" class="card p-6 space-y-4">
+
+      <!-- Visibility toggle -->
+      <form method="post" class="card-cream p-6 space-y-4">
         {{ form.hidden_tag() }}
         <div class="flex items-center justify-between gap-4">
           <div>
-            <p class="font-semibold text-slate-900">Visibility</p>
-            <p class="text-sm text-slate-500">
-              {% if profile.is_public %}Anyone with the link can view your portfolio.
-              {% else %}Your portfolio is private. Visitors see "Page not found".{% endif %}
+            <p class="font-semibold" style="color: var(--forest);">Visibility</p>
+            <p class="text-sm" style="color: var(--color-muted);">
+              {% if profile.is_public %}
+                Anyone with the link can view your portfolio.
+              {% else %}
+                Your portfolio is private. Visitors see "Page not found".
+              {% endif %}
             </p>
           </div>
-          <span class="badge {{ '!bg-emerald-100 !text-emerald-800' if profile.is_public else '' }}">
+          <span class="badge {% if profile.is_public %}badge-success{% endif %}">
             {{ "Public" if profile.is_public else "Private" }}
           </span>
         </div>
-        <label class="flex items-center gap-3 text-sm text-slate-700">
-          {{ form.is_public(class="h-5 w-5 rounded border-slate-300") }} {{ form.is_public.label.text }}
+
+        <label class="flex items-center gap-3 text-sm" style="color: var(--forest);">
+          {{ form.is_public(class="h-5 w-5 rounded", style="accent-color: var(--forest);") }}
+          {{ form.is_public.label.text }}
         </label>
-        <p class="text-xs text-slate-500">Your phone number is never shown on the public page.</p>
+        <p class="text-xs" style="color: var(--color-muted);">
+          Your phone number is never shown on the public page.
+        </p>
         {{ form.submit(class="btn-primary") }}
       </form>
 
-      <!-- Link -->
-      <div class="card p-6 space-y-3">
-        <p class="font-semibold text-slate-900">Your portfolio link</p>
+      <!-- Link box -->
+      <div class="card-cream p-6 space-y-3">
+        <p class="font-semibold" style="color: var(--forest);">Your portfolio link</p>
         <div class="flex gap-2">
-          <input id="share-link" type="text" readonly value="{{ link }}" class="input font-mono text-sm" aria-label="Portfolio link">
+          <input id="share-link" type="text" readonly value="{{ link }}"
+                 class="input font-mono text-sm" aria-label="Portfolio link">
           <button type="button" id="copy-link" class="btn-secondary shrink-0">Copy</button>
         </div>
         <div class="flex flex-wrap items-center gap-3 text-sm">
           {% if profile.is_public %}
             <a href="{{ link }}" target="_blank" rel="noopener" class="link">Open portfolio</a>
           {% else %}
-            <span class="text-slate-400">Make it public to open the link.</span>
+            <span style="color: var(--color-muted);">Make it public to open the link.</span>
           {% endif %}
         </div>
-        <p class="text-xs text-slate-500">
-          The link uses a random code, not your user ID. While the app runs on localhost the link and QR code
-          work only on this computer; if the app is hosted, the same link works anywhere.
+        <p class="text-xs" style="color: var(--color-muted);">
+          The link uses a random code, not your user ID. While the app runs on localhost the link and
+          QR code work only on this computer; if the app is hosted, the same link works anywhere.
         </p>
       </div>
+
     </div>
 
-    <!-- QR code -->
-    <div class="card p-6 text-center">
-      <p class="font-semibold text-slate-900">QR code</p>
-      <div class="mt-3 inline-block rounded-lg border border-slate-200 p-2 bg-white">{{ qr_svg|safe }}</div>
-      <p class="mt-2 text-xs text-slate-500 max-w-[14rem] mx-auto">Scan to open your portfolio.
-        Right-click the code to save it.</p>
+    <!-- QR card -->
+    <div class="card-cream p-6 text-center">
+      <p class="font-semibold" style="color: var(--forest);">QR code</p>
+      <div class="mt-3 inline-block rounded-xl p-2"
+           style="border: 1.5px solid rgba(47,93,76,0.2); background: var(--cream);">
+        {{ qr_svg|safe }}
+      </div>
+      <p class="mt-2 text-xs max-w-[14rem] mx-auto" style="color: var(--color-muted);">
+        Scan to open your portfolio. Right-click the code to save it.
+      </p>
     </div>
+
   </div>
 </section>
 {% endblock %}
@@ -64,10 +85,9 @@
 {% block scripts %}
 <script>
   document.getElementById("copy-link").addEventListener("click", function () {
-    var input = document.getElementById("share-link");
+    var input  = document.getElementById("share-link");
     var button = this;
     input.select();
-    // navigator.clipboard needs a secure context; 127.0.0.1 counts as one.
     (navigator.clipboard ? navigator.clipboard.writeText(input.value) : Promise.reject())
       .catch(function () { document.execCommand("copy"); })
       .finally(function () {

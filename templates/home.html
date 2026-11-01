@@ -2,19 +2,29 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<!-- Hero -->
-<section class="relative overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-slate-50">
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section style="background: var(--sage-bg);" class="relative overflow-hidden">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 lg:py-24 grid lg:grid-cols-2 gap-12 items-center">
+
+    <!-- Left: text -->
     <div>
-      <span class="badge">Mini project &middot; Free and open source</span>
-      <h1 class="mt-4 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+      <span class="badge" style="background: var(--sage-bg); color: var(--forest); border-color: rgba(47,93,76,0.3);">
+        Mini project &middot; Free and open source
+      </span>
+
+      <h1 class="mt-4 text-4xl sm:text-5xl font-bold leading-tight"
+          style="font-family: var(--font-heading); color: var(--forest);">
         One profile.<br>
-        <span class="text-indigo-600">A resume and a portfolio</span> in minutes.
+        <span style="color: var(--burgundy);">A resume and a portfolio</span> in minutes.
       </h1>
-      <p class="mt-5 text-lg text-slate-600 max-w-xl">
+
+      <p class="mt-5 text-lg max-w-xl" style="color: var(--color-muted);">
         Enter your education, skills, projects and internships once.
         Download a professional PDF resume in different themes and share a polished public portfolio link.
       </p>
+
       <div class="mt-8 flex flex-wrap gap-3">
         {% if current_user.is_authenticated %}
           <a href="{{ url_for('main.dashboard') }}" class="btn-primary px-6 py-3 text-base">Go to dashboard</a>
@@ -23,53 +33,159 @@
           <a href="{{ url_for('auth.login') }}" class="btn-secondary px-6 py-3 text-base">Log in</a>
         {% endif %}
       </div>
+
       <dl class="mt-10 grid grid-cols-3 gap-6 max-w-md">
-        <div><dt class="text-xs uppercase tracking-wide text-slate-500">Cost</dt><dd class="text-xl font-bold text-slate-900">Rs. 0</dd></div>
-        <div><dt class="text-xs uppercase tracking-wide text-slate-500">Resume themes</dt><dd class="text-xl font-bold text-slate-900">2</dd></div>
-        <div><dt class="text-xs uppercase tracking-wide text-slate-500">Runs</dt><dd class="text-xl font-bold text-slate-900">Offline</dd></div>
+        <div>
+          <dt class="text-xs uppercase tracking-wide font-semibold" style="color: var(--color-muted);">Cost</dt>
+          <dd class="text-xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">Rs. 0</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-wide font-semibold" style="color: var(--color-muted);">Resume themes</dt>
+          <dd class="text-xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">2</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-wide font-semibold" style="color: var(--color-muted);">Runs</dt>
+          <dd class="text-xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">Offline</dd>
+        </div>
       </dl>
     </div>
 
-    <!-- Decorative portfolio card -->
-    <div class="relative">
-      <div class="absolute -inset-6 bg-indigo-200/40 blur-3xl rounded-full" aria-hidden="true"></div>
-      <div class="relative card p-6 shadow-xl">
-        <div class="flex items-center gap-4">
-          <div class="h-14 w-14 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-white flex items-center justify-center text-xl font-bold">AR</div>
-          <div>
-            <p class="font-semibold text-slate-900">Asha Rao</p>
-            <p class="text-sm text-slate-500">Computer Engineering student &middot; Full-stack developer</p>
-          </div>
-        </div>
-        <div class="mt-5 flex flex-wrap gap-2">
-          {% for s in ["Python", "Flask", "SQL", "JavaScript", "Git", "Tailwind"] %}
-            <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">{{ s }}</span>
-          {% endfor %}
-        </div>
-        <div class="mt-5 grid grid-cols-2 gap-3">
-          <div class="rounded-lg border border-slate-200 p-3">
-            <p class="text-sm font-semibold text-slate-900">Smart Attendance</p>
-            <p class="text-xs text-slate-500 mt-1">Face recognition attendance system</p>
-          </div>
-          <div class="rounded-lg border border-slate-200 p-3">
-            <p class="text-sm font-semibold text-slate-900">Campus Connect</p>
-            <p class="text-xs text-slate-500 mt-1">Event portal for college clubs</p>
-          </div>
-        </div>
-        <div class="mt-5 flex items-center justify-between text-xs text-slate-500">
-          <span>portfolio/asha-rao-3f9a1c</span>
-          <span class="inline-flex items-center gap-1 text-emerald-600 font-medium"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Public</span>
-        </div>
-      </div>
+    <!-- Right: doodle illustration -->
+    <div class="relative flex items-center justify-center">
+      <!-- Soft blurred blob behind the illustration -->
+      <div class="absolute inset-0 rounded-3xl"
+           style="background: var(--sage); opacity: 0.25; filter: blur(40px);"></div>
+
+      <!-- SVG doodle: floating portfolio/resume pages, pencil, leaves, sparkles -->
+      <svg viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg"
+           class="relative w-full max-w-sm lg:max-w-md"
+           aria-label="Illustration of floating portfolio documents with a pencil and leaves"
+           role="img">
+
+        <!-- Background arch / frame — sage green -->
+        <path d="M40 380 Q40 120 210 60 Q380 120 380 380Z"
+              fill="#628764" opacity="0.22"/>
+
+        <!-- ── BACK DOCUMENT (notebook-lined, tilted right) — white card, forest accents ── -->
+        <g transform="rotate(12, 280, 130)">
+          <rect x="230" y="50" width="120" height="155" rx="10"
+                fill="#fff" stroke="#2F5D4C" stroke-width="1.8"/>
+          <!-- Forest sparkle top-right -->
+          <path d="M344 58 l3 8 l3-8 l-3-2z M347 54 l-8 3 l8 3 l2-3z"
+                fill="#2F5D4C"/>
+          <!-- Lined content — moss tint -->
+          <line x1="248" y1="95"  x2="334" y2="95"  stroke="#9CB180" stroke-width="1.2"/>
+          <line x1="248" y1="108" x2="334" y2="108" stroke="#9CB180" stroke-width="1.2"/>
+          <line x1="248" y1="121" x2="310" y2="121" stroke="#9CB180" stroke-width="1.2"/>
+          <line x1="248" y1="134" x2="320" y2="134" stroke="#9CB180" stroke-width="1.2"/>
+          <line x1="248" y1="147" x2="300" y2="147" stroke="#9CB180" stroke-width="1.2"/>
+          <!-- Sage chart icon -->
+          <rect x="248" y="65" width="36" height="22" rx="3" fill="#edf2e7" stroke="#628764" stroke-width="1"/>
+          <polyline points="253,83 260,74 267,79 274,70 281,76"
+                    fill="none" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Ring binder dots — forest/cream -->
+          <circle cx="237" cy="80"  r="4" fill="#2F5D4C"/>
+          <circle cx="237" cy="105" r="4" fill="#2F5D4C"/>
+          <circle cx="237" cy="130" r="4" fill="#2F5D4C"/>
+          <circle cx="237" cy="155" r="4" fill="#628764"/>
+          <circle cx="237" cy="180" r="4" fill="#628764"/>
+        </g>
+
+        <!-- ── FRONT DOCUMENT (white card, dark image block, tilted left) ── -->
+        <g transform="rotate(-8, 145, 130)">
+          <rect x="80" y="45" width="130" height="165" rx="10"
+                fill="#fff" stroke="#2F5D4C" stroke-width="1.8"/>
+          <!-- Burgundy sparkle top-left -->
+          <path d="M94 60 l2.5 7 l2.5-7 l-2.5-1.5z M96.5 56 l-7 2.5 l7 2.5 l1.5-2.5z"
+                fill="#7A0C45"/>
+          <!-- Forest image placeholder -->
+          <rect x="95" y="72" width="100" height="58" rx="5" fill="#2F5D4C"/>
+          <!-- Sage chart line inside dark box -->
+          <polyline points="100,124 115,100 127,112 140,92 158,110 178,99 188,110"
+                    fill="none" stroke="#9CB180" stroke-width="2" stroke-linecap="round"/>
+          <!-- Text lines -->
+          <line x1="95" y1="142" x2="180" y2="142" stroke="#c7d9b8" stroke-width="1.5"/>
+          <line x1="95" y1="154" x2="170" y2="154" stroke="#c7d9b8" stroke-width="1.5"/>
+          <line x1="95" y1="166" x2="160" y2="166" stroke="#c7d9b8" stroke-width="1.5"/>
+          <line x1="95" y1="178" x2="175" y2="178" stroke="#c7d9b8" stroke-width="1.5"/>
+          <line x1="95" y1="190" x2="150" y2="190" stroke="#c7d9b8" stroke-width="1.5"/>
+        </g>
+
+        <!-- ── BOTTOM CARD (blush portfolio card — this one stays pink as accent) ── -->
+        <g transform="rotate(4, 210, 270)">
+          <rect x="130" y="225" width="160" height="95" rx="12"
+                fill="#F3D8CC" stroke="#D49A9A" stroke-width="1.5"/>
+          <!-- Forest header bar -->
+          <rect x="130" y="225" width="160" height="24" rx="12"
+                fill="#2F5D4C" opacity="0.75"/>
+          <rect x="130" y="237" width="160" height="12" rx="0"
+                fill="#2F5D4C" opacity="0.75"/>
+          <!-- Content lines — cream on blush -->
+          <line x1="147" y1="265" x2="272" y2="265" stroke="#2F5D4C" stroke-width="2"   stroke-linecap="round" opacity="0.5"/>
+          <line x1="147" y1="276" x2="255" y2="276" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+          <line x1="147" y1="287" x2="263" y2="287" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+          <line x1="147" y1="298" x2="240" y2="298" stroke="#2F5D4C" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+          <!-- Burgundy 4-pt star -->
+          <path d="M278 252 l2 5 l2-5 l-2-1.5z M280 249 l-5 2 l5 2 l1.5-2z"
+                fill="#7A0C45"/>
+        </g>
+
+        <!-- ── PENCIL — burgundy body ── -->
+        <g transform="rotate(-40, 90, 280)">
+          <rect x="68" y="240" width="14" height="80" rx="3" fill="#7A0C45"/>
+          <rect x="70" y="237" width="10" height="8" rx="2" fill="#F3D8CC" stroke="#D49A9A" stroke-width="1"/>
+          <rect x="68" y="245" width="14" height="5" fill="#5c0934" opacity="0.7"/>
+          <polygon points="68,320 82,320 75,340" fill="#f5e0c8"/>
+          <polygon points="71,330 79,330 75,340" fill="#555"/>
+        </g>
+
+        <!-- ── LEAVES (bottom right) — forest + moss ── -->
+        <g opacity="0.9">
+          <path d="M340 340 Q350 310 355 285"
+                stroke="#2F5D4C" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M350 310 Q365 295 370 280 Q355 285 350 310Z" fill="#2F5D4C"/>
+          <path d="M355 325 Q375 315 378 298 Q360 305 355 325Z" fill="#628764"/>
+          <path d="M345 298 Q362 285 366 270 Q350 277 345 298Z" fill="#9CB180"/>
+        </g>
+
+        <!-- ── LEAVES (bottom left) — forest + moss ── -->
+        <g opacity="0.9">
+          <path d="M72 345 Q62 318 58 295"
+                stroke="#2F5D4C" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M63 318 Q45 305 43 288 Q58 295 63 318Z" fill="#2F5D4C"/>
+          <path d="M68 332 Q48 325 46 308 Q62 312 68 332Z" fill="#628764"/>
+          <path d="M61 305 Q42 296 42 279 Q56 287 61 305Z" fill="#9CB180"/>
+        </g>
+
+        <!-- ── SPARKLE dots ── -->
+        <!-- Forest sparkle top left -->
+        <path d="M55 95 l2 6 l2-6 l-2-1.5z  M57 91 l-6 2 l6 2 l1.5-2z"  fill="#2F5D4C"/>
+        <!-- Burgundy sparkle top centre -->
+        <path d="M195 35 l1.5 4.5 l1.5-4.5 l-1.5-1z  M196.5 32 l-4.5 1.5 l4.5 1.5 l1-1.5z"
+              fill="#7A0C45" opacity="0.8"/>
+        <!-- Moss sparkle right mid -->
+        <path d="M392 175 l1.5 4.5 l1.5-4.5 l-1.5-1z  M393.5 172 l-4.5 1.5 l4.5 1.5 l1-1.5z"
+              fill="#628764"/>
+        <!-- Sage dots bottom -->
+        <circle cx="200" cy="355" r="3" fill="#628764" opacity="0.6"/>
+        <circle cx="215" cy="363" r="2" fill="#9CB180" opacity="0.5"/>
+      </svg>
     </div>
+
   </div>
 </section>
 
-<!-- Objectives -->
+<!-- ============================================================
+     OBJECTIVES
+     ============================================================ -->
 <section id="about" class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
   <div class="max-w-2xl">
-    <h2 class="text-3xl font-bold text-slate-900">Project objectives</h2>
-    <p class="mt-3 text-slate-600">Why this system was built and what it aims to solve for students.</p>
+    <h2 class="text-3xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+      Project objectives
+    </h2>
+    <p class="mt-3" style="color: var(--color-muted);">
+      Why this system was built and what it aims to solve for students.
+    </p>
   </div>
   <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
     {% set objectives = [
@@ -79,19 +195,29 @@
       ("Zero cost, offline first", "Runs on localhost with free tools; every core feature works without internet."),
     ] %}
     {% for title, text in objectives %}
-      <div class="card p-6">
-        <div class="h-9 w-9 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">{{ loop.index }}</div>
-        <h3 class="mt-4 font-semibold text-slate-900">{{ title }}</h3>
-        <p class="mt-2 text-sm text-slate-600">{{ text }}</p>
+      {# Alternate: odd cards = sage-bg (green-tinted), even = cream #}
+      <div class="p-6 rounded-xl border transition"
+           style="background: {% if loop.index is odd %}var(--sage-bg){% else %}var(--cream){% endif %};
+                  border-color: rgba(47,93,76,0.18);
+                  box-shadow: 0 2px 8px rgba(47,93,76,0.06);">
+        <div class="h-9 w-9 rounded-lg flex items-center justify-center font-bold text-sm"
+             style="{% if loop.index is odd %}background: var(--forest); color: var(--cream);{% else %}background: var(--burgundy); color: var(--cream);{% endif %}
+                    font-family: var(--font-heading);">
+          {{ loop.index }}
+        </div>
+        <h3 class="mt-4 font-semibold" style="color: var(--forest);">{{ title }}</h3>
+        <p class="mt-2 text-sm" style="color: var(--color-muted);">{{ text }}</p>
       </div>
     {% endfor %}
   </div>
 </section>
 
-<!-- Features -->
-<section id="features" class="bg-white border-y border-slate-200">
+<!-- ============================================================
+     FEATURES
+     ============================================================ -->
+<section id="features" style="background: var(--sage); border-top: 1px solid rgba(47,93,76,0.15); border-bottom: 1px solid rgba(47,93,76,0.15);">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-    <h2 class="text-3xl font-bold text-slate-900">Features</h2>
+    <h2 class="text-3xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">Features</h2>
     <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% set features = [
         ("Complete student profile", "Education, skills, certifications, projects, internships, achievements and extracurriculars."),
@@ -102,124 +228,180 @@
         ("Share with QR code", "Toggle visibility, copy your link, or show a QR code at placement drives."),
       ] %}
       {% for title, text in features %}
-        <div class="rounded-xl border border-slate-200 p-6 hover:border-indigo-300 hover:shadow-md transition">
-          <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          <h3 class="mt-3 font-semibold text-slate-900">{{ title }}</h3>
-          <p class="mt-2 text-sm text-slate-600">{{ text }}</p>
+        {# Alternate card bg: odd = cream, even = blush — so cream dominates, blush is an accent #}
+        <div class="p-6 rounded-xl transition"
+             style="background: {% if loop.index is odd %}var(--cream){% else %}var(--blush){% endif %};
+                    border: 1px solid rgba(47,93,76,0.14);
+                    box-shadow: 0 2px 6px rgba(47,93,76,0.07);"
+             onmouseover="this.style.borderColor='var(--forest)'; this.style.boxShadow='0 6px 20px rgba(47,93,76,0.13)';"
+             onmouseout="this.style.borderColor='rgba(47,93,76,0.14)'; this.style.boxShadow='0 2px 6px rgba(47,93,76,0.07)';">
+          <!-- Check icon: alternating forest / burgundy -->
+          <svg class="h-6 w-6" style="color: {% if loop.index is odd %}var(--forest){% else %}var(--burgundy){% endif %};"
+               fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <h3 class="mt-3 font-semibold" style="color: var(--forest);">{{ title }}</h3>
+          <p class="mt-2 text-sm" style="color: var(--color-muted);">{{ text }}</p>
         </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- How it works -->
-<section id="how-it-works" class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-  <h2 class="text-3xl font-bold text-slate-900">How it works</h2>
-  <ol class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    {% set steps = [
-      ("Register", "Create a free account with your email."),
-      ("Fill your profile", "Add education, skills, projects and more. Optionally polish text with AI."),
-      ("Generate resume", "Pick a theme, choose sections, preview and download the PDF."),
-      ("Share portfolio", "Make your portfolio public and share the link or QR code."),
-    ] %}
-    {% for title, text in steps %}
-      <li class="relative pl-14">
-        <span class="absolute left-0 top-0 h-10 w-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">{{ loop.index }}</span>
-        <h3 class="font-semibold text-slate-900">{{ title }}</h3>
-        <p class="mt-1 text-sm text-slate-600">{{ text }}</p>
-      </li>
-    {% endfor %}
-  </ol>
+<!-- ============================================================
+     HOW IT WORKS
+     ============================================================ -->
+<section id="how-it-works" style="background: var(--sage-bg);">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <h2 class="text-3xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+      How it works
+    </h2>
+    <ol class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% set steps = [
+        ("Register", "Create a free account with your email."),
+        ("Fill your profile", "Add education, skills, projects and more. Optionally polish text with AI."),
+        ("Generate resume", "Pick a theme, choose sections, preview and download the PDF."),
+        ("Share portfolio", "Make your portfolio public and share the link or QR code."),
+      ] %}
+      {% for title, text in steps %}
+        <li class="relative pl-14">
+          <span class="absolute left-0 top-0 h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm"
+                style="background: {% if loop.index is odd %}var(--forest){% else %}var(--burgundy){% endif %};
+                       color: var(--cream); font-family: var(--font-heading);">
+            {{ loop.index }}
+          </span>
+          <h3 class="font-semibold" style="color: var(--forest);">{{ title }}</h3>
+          <p class="mt-1 text-sm" style="color: var(--color-muted);">{{ text }}</p>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
 </section>
 
-<!-- Sample preview -->
-<section id="preview" class="bg-slate-900">
+<!-- ============================================================
+     SAMPLE OUTPUT
+     ============================================================ -->
+<section id="preview" style="background: var(--forest);">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-    <h2 class="text-3xl font-bold text-white">Sample output</h2>
-    <p class="mt-3 text-slate-300">A preview of what students generate from the same saved data.</p>
+    <h2 class="text-3xl font-bold" style="font-family: var(--font-heading); color: var(--cream);">
+      Sample output
+    </h2>
+    <p class="mt-3" style="color: rgba(255,249,244,0.7);">
+      A preview of what students generate from the same saved data.
+    </p>
 
     <div class="mt-10 grid lg:grid-cols-2 gap-8">
+
       <!-- Mini resume (IT / Industry style) -->
-      <div class="bg-white rounded-xl shadow-2xl p-8 text-[13px] leading-relaxed text-slate-800" style="font-family: Calibri, Arial, sans-serif;">
+      <div class="rounded-xl shadow-2xl p-8 text-[13px] leading-relaxed"
+           style="background: #fff; color: #1a2e25; font-family: Calibri, Arial, sans-serif;">
         <div class="text-center">
-          <p class="text-2xl font-bold tracking-wide text-slate-900">ASHA RAO</p>
-          <p class="text-slate-600">Pune, India &middot; github.com/asharao &middot; linkedin.com/in/asharao</p>
+          <p class="text-2xl font-bold tracking-wide" style="color: #1a2e25;">ASHA RAO</p>
+          <p style="color: #628764;">Pune, India &middot; github.com/asharao &middot; linkedin.com/in/asharao</p>
         </div>
-        <p class="mt-4 font-bold uppercase tracking-wider text-xs border-b border-slate-300 pb-0.5">Summary</p>
+        <p class="mt-4 font-bold uppercase tracking-wider text-xs pb-0.5"
+           style="border-bottom: 1px solid #9CB180; color: #2F5D4C;">Summary</p>
         <p class="mt-1">Final-year Computer Engineering student who builds full-stack web apps with Python and Flask.</p>
-        <p class="mt-3 font-bold uppercase tracking-wider text-xs border-b border-slate-300 pb-0.5">Skills</p>
+        <p class="mt-3 font-bold uppercase tracking-wider text-xs pb-0.5"
+           style="border-bottom: 1px solid #9CB180; color: #2F5D4C;">Skills</p>
         <p class="mt-1"><b>Languages:</b> Python, JavaScript, SQL &nbsp; <b>Frameworks:</b> Flask, Bootstrap</p>
-        <p class="mt-3 font-bold uppercase tracking-wider text-xs border-b border-slate-300 pb-0.5">Projects</p>
-        <div class="mt-1 flex justify-between"><b>Smart Attendance System</b><span class="text-slate-500">2025</span></div>
+        <p class="mt-3 font-bold uppercase tracking-wider text-xs pb-0.5"
+           style="border-bottom: 1px solid #9CB180; color: #2F5D4C;">Projects</p>
+        <div class="mt-1 flex justify-between">
+          <b>Smart Attendance System</b><span style="color: #628764;">2025</span>
+        </div>
         <ul class="list-disc pl-5">
           <li>Built a face-recognition attendance app using Python and OpenCV.</li>
           <li>Designed a SQLite schema and Flask REST endpoints for reports.</li>
         </ul>
-        <p class="mt-3 font-bold uppercase tracking-wider text-xs border-b border-slate-300 pb-0.5">Education</p>
-        <div class="mt-1 flex justify-between"><span><b>B.E. Computer Engineering</b>, Pune University</span><span class="text-slate-500">CGPA 8.7</span></div>
+        <p class="mt-3 font-bold uppercase tracking-wider text-xs pb-0.5"
+           style="border-bottom: 1px solid #9CB180; color: #2F5D4C;">Education</p>
+        <div class="mt-1 flex justify-between">
+          <span><b>B.E. Computer Engineering</b>, Pune University</span>
+          <span style="color: #628764;">CGPA 8.7</span>
+        </div>
       </div>
 
-      <!-- Mini portfolio -->
-      <div class="rounded-xl overflow-hidden shadow-2xl bg-slate-800 border border-slate-700">
-        <div class="p-8 bg-gradient-to-br from-indigo-600 to-violet-600 text-white">
-          <p class="text-sm opacity-80">Hi, I'm</p>
-          <p class="text-3xl font-bold">Asha Rao</p>
-          <p class="mt-1 opacity-90">Aspiring software engineer &middot; Python &amp; web</p>
+      <!-- Mini portfolio preview -->
+      <div class="rounded-xl overflow-hidden shadow-2xl"
+           style="background: var(--sage); border: 1px solid rgba(47,93,76,0.3);">
+        <div class="p-8" style="background: var(--burgundy);">
+          <p class="text-sm" style="color: rgba(255,249,244,0.75);">Hi, I'm</p>
+          <p class="text-3xl font-bold" style="color: var(--cream); font-family: var(--font-heading);">Asha Rao</p>
+          <p class="mt-1" style="color: rgba(255,249,244,0.85);">Aspiring software engineer &middot; Python &amp; web</p>
           <div class="mt-4 flex gap-2 text-xs">
-            <span class="px-3 py-1 rounded-full bg-white/20">GitHub</span>
-            <span class="px-3 py-1 rounded-full bg-white/20">LinkedIn</span>
-            <span class="px-3 py-1 rounded-full bg-white/20">Contact</span>
+            <span class="px-3 py-1 rounded-full" style="background: rgba(255,249,244,0.2); color: var(--cream);">GitHub</span>
+            <span class="px-3 py-1 rounded-full" style="background: rgba(255,249,244,0.2); color: var(--cream);">LinkedIn</span>
+            <span class="px-3 py-1 rounded-full" style="background: rgba(255,249,244,0.2); color: var(--cream);">Contact</span>
           </div>
         </div>
         <div class="p-6 grid grid-cols-2 gap-4">
-          <div class="rounded-lg bg-slate-700/60 p-4">
-            <p class="text-white font-semibold text-sm">Smart Attendance</p>
+          <div class="rounded-lg p-4" style="background: rgba(47,93,76,0.3);">
+            <p class="font-semibold text-sm" style="color: var(--cream);">Smart Attendance</p>
             <div class="mt-2 flex flex-wrap gap-1">
-              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200">Python</span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200">OpenCV</span>
+              <span class="text-[10px] px-2 py-0.5 rounded"
+                    style="background: rgba(243,216,204,0.25); color: var(--blush);">Python</span>
+              <span class="text-[10px] px-2 py-0.5 rounded"
+                    style="background: rgba(243,216,204,0.25); color: var(--blush);">OpenCV</span>
             </div>
           </div>
-          <div class="rounded-lg bg-slate-700/60 p-4">
-            <p class="text-white font-semibold text-sm">Campus Connect</p>
+          <div class="rounded-lg p-4" style="background: rgba(47,93,76,0.3);">
+            <p class="font-semibold text-sm" style="color: var(--cream);">Campus Connect</p>
             <div class="mt-2 flex flex-wrap gap-1">
-              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200">Flask</span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200">SQLite</span>
+              <span class="text-[10px] px-2 py-0.5 rounded"
+                    style="background: rgba(243,216,204,0.25); color: var(--blush);">Flask</span>
+              <span class="text-[10px] px-2 py-0.5 rounded"
+                    style="background: rgba(243,216,204,0.25); color: var(--blush);">SQLite</span>
             </div>
           </div>
           <div class="col-span-2">
-            <p class="text-slate-300 text-xs mb-2">Skills</p>
+            <p class="text-xs mb-2" style="color: rgba(255,249,244,0.6);">Skills</p>
             <div class="space-y-2">
-              <div class="h-2 rounded bg-slate-700"><div class="h-2 rounded bg-indigo-400" style="width: 85%"></div></div>
-              <div class="h-2 rounded bg-slate-700"><div class="h-2 rounded bg-indigo-400" style="width: 70%"></div></div>
+              <div class="h-2 rounded" style="background: rgba(47,93,76,0.4);">
+                <div class="h-2 rounded" style="width: 85%; background: var(--sage-lt);"></div>
+              </div>
+              <div class="h-2 rounded" style="background: rgba(47,93,76,0.4);">
+                <div class="h-2 rounded" style="width: 70%; background: var(--rose);"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
+
 {% endblock %}
 
+<!-- ============================================================
+     FOOTER  (overrides base.html footer to give a richer 3-col layout)
+     ============================================================ -->
 {% block footer %}
-<footer class="bg-slate-950 text-slate-400">
+<footer style="background: var(--forest); color: rgba(255,249,244,0.75);">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid sm:grid-cols-3 gap-8 text-sm">
     <div>
-      <p class="font-semibold text-white">Student Portfolio Management System</p>
+      <p class="font-semibold" style="color: var(--cream); font-family: var(--font-heading);">
+        Student Portfolio Management System
+      </p>
       <p class="mt-2">A college mini project to create resumes and portfolios from one profile.</p>
     </div>
     <div>
-      <p class="font-semibold text-white">Explore</p>
+      <p class="font-semibold" style="color: var(--cream);">Explore</p>
       <ul class="mt-2 space-y-1">
-        <li><a href="#about" class="hover:text-white">Objectives</a></li>
-        <li><a href="#features" class="hover:text-white">Features</a></li>
-        <li><a href="#how-it-works" class="hover:text-white">How it works</a></li>
+        <li><a href="#about"        class="hover:text-white transition-colors">Objectives</a></li>
+        <li><a href="#features"     class="hover:text-white transition-colors">Features</a></li>
+        <li><a href="#how-it-works" class="hover:text-white transition-colors">How it works</a></li>
       </ul>
     </div>
     <div>
-      <p class="font-semibold text-white">Tech stack</p>
+      <p class="font-semibold" style="color: var(--cream);">Tech stack</p>
       <p class="mt-2">Python Flask &middot; SQLite &middot; Jinja2 &middot; Tailwind CSS &middot; WeasyPrint &middot; Google Gemini (optional)</p>
     </div>
   </div>
-  <div class="border-t border-slate-800 py-4 text-center text-xs">&copy; {{ now_year }} Student Portfolio Management System</div>
+  <div class="text-center text-xs py-4"
+       style="border-top: 1px solid rgba(255,249,244,0.12); color: rgba(255,249,244,0.5);">
+    &copy; {{ now_year }} Student Portfolio Management System
+  </div>
 </footer>
 {% endblock %}

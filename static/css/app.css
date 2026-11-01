@@ -1,83 +1,518 @@
 /*
- * Small set of reusable component classes for the app pages.
- * Plain CSS (not Tailwind @apply) because the Tailwind browser script
- * does not process external stylesheets.
+ * app.css — shared component styles for the Student Portfolio app.
+ *
+ * Palette variables are defined on :root so every template can reference them
+ * with var(). Tailwind utility classes still work alongside these.
+ *
+ * Fonts are self-hosted from static/fonts/. Fallback stacks ensure text is
+ * readable before/if the font files load.
  */
 
-.card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.875rem;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+/* ============================================================
+   0. FONT FACES
+   ============================================================ */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/Fraunces-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('../fonts/DMSans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ============================================================
+   1. PALETTE — all pages share these variables
+   ============================================================ */
+:root {
+  /* Brand colours */
+  --sage:     #9CB180;   /* page background tint */
+  --sage-lt:  #c7d9b8;   /* lighter sage for bands */
+  --sage-bg:  #edf2e7;   /* very-light sage page surface */
+  --forest:   #2F5D4C;   /* primary headings, logo, labels, focus rings */
+  --moss:     #628764;   /* secondary bands, hover states */
+  --burgundy: #7A0C45;   /* primary buttons, links, accents */
+  --burgundy-dk: #5c0934; /* button hover */
+  --blush:    #F3D8CC;   /* card backgrounds */
+  --blush-dk: #e4c1b1;   /* card border hover */
+  --rose:     #D49A9A;   /* accent borders */
+  --cream:    #FFF9F4;   /* input surfaces, card surfaces */
+
+  /* Semantic */
+  --color-success:   #2F5D4C;   /* forest */
+  --color-success-bg:#e4f0e8;
+  --color-error:     #8b1a1a;   /* deep red, readable on cream */
+  --color-error-bg:  #fce8e8;
+  --color-warning:   #7a5c0c;
+  --color-warning-bg:#fdf3dc;
+  --color-info:      #1a4a5c;
+  --color-info-bg:   #dcedf5;
+  --color-muted:     rgba(47, 93, 76, 0.6);  /* forest at 60% */
+
+  /* Typography */
+  --font-heading: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body:    'DM Sans', 'Segoe UI', Inter, system-ui, -apple-system, sans-serif;
+
+  /* Radius */
+  --radius-sm:  0.5rem;
+  --radius-md:  1rem;
+  --radius-lg:  1.25rem;
+  --radius-xl:  1.5rem;
+  --radius-pill:9999px;
+}
+
+/* ============================================================
+   2. BASE RESET / BODY
+   ============================================================ */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--sage-bg);
+  color: var(--forest);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--forest);
+}
+
+/* ============================================================
+   3. CARD
+   ============================================================ */
+.card {
+  background: var(--blush);
+  border: 1px solid rgba(47, 93, 76, 0.15);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 8px rgba(47, 93, 76, 0.07);
+}
+
+.card-cream {
+  background: var(--cream);
+  border: 1px solid rgba(47, 93, 76, 0.15);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 8px rgba(47, 93, 76, 0.07);
+}
+
+/* ============================================================
+   4. BUTTONS
+   ============================================================ */
 .btn-primary,
 .btn-secondary,
+.btn-outline,
 .btn-danger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.55rem 1.1rem;
-  border-radius: 0.5rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1.25rem;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
   text-decoration: none;
+  transition: background-color 0.18s, border-color 0.18s, color 0.18s,
+              box-shadow 0.18s, transform 0.12s;
+  outline: none;
 }
-.btn-primary { background: #4f46e5; color: #fff; border: 1px solid #4f46e5; }
-.btn-primary:hover { background: #4338ca; border-color: #4338ca; }
-.btn-secondary { background: #fff; color: #334155; border: 1px solid #cbd5e1; }
-.btn-secondary:hover { background: #f8fafc; border-color: #94a3b8; }
-.btn-danger { background: #fff; color: #be123c; border: 1px solid #fecdd3; }
-.btn-danger:hover { background: #fff1f2; }
 
-.btn-disabled {
-  opacity: 0.55;
+/* Lift on hover — respects reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-outline:hover,
+  .btn-danger:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Focus ring for keyboard nav */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-outline:focus-visible,
+.btn-danger:focus-visible {
+  box-shadow: 0 0 0 3px var(--cream), 0 0 0 5px var(--forest);
+}
+
+/* --- Primary (filled burgundy) --- */
+.btn-primary {
+  background: var(--burgundy);
+  color: var(--cream);
+  border: 1.5px solid var(--burgundy);
+}
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: var(--burgundy-dk);
+  border-color: var(--burgundy-dk);
+  color: var(--cream);
+}
+
+/* --- Secondary (outlined forest) --- */
+.btn-secondary {
+  background: var(--cream);
+  color: var(--forest);
+  border: 1.5px solid rgba(47, 93, 76, 0.45);
+}
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background: var(--sage-bg);
+  border-color: var(--forest);
+  color: var(--forest);
+}
+
+/* --- Outline (same as secondary alias) --- */
+.btn-outline {
+  background: transparent;
+  color: var(--burgundy);
+  border: 1.5px solid var(--burgundy);
+}
+.btn-outline:hover,
+.btn-outline:focus-visible {
+  background: var(--blush);
+  color: var(--burgundy-dk);
+  border-color: var(--burgundy-dk);
+}
+
+/* --- Danger (outlined deep red) --- */
+.btn-danger {
+  background: var(--cream);
+  color: var(--color-error);
+  border: 1.5px solid rgba(139, 26, 26, 0.4);
+}
+.btn-danger:hover,
+.btn-danger:focus-visible {
+  background: var(--color-error-bg);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+/* Disabled state */
+.btn-disabled,
+[disabled].btn-primary,
+[disabled].btn-secondary,
+[disabled].btn-outline,
+[disabled].btn-danger {
+  opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
+/* ============================================================
+   5. FORM FIELDS
+   ============================================================ */
 .input {
   display: block;
   width: 100%;
-  padding: 0.55rem 0.75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.5rem;
-  background: #fff;
+  padding: 0.6rem 0.875rem;
+  border: 1.5px solid rgba(47, 93, 76, 0.4);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  font-family: var(--font-body);
   font-size: 0.9rem;
-  color: #0f172a;
+  color: var(--forest);
   transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input::placeholder {
+  color: var(--color-muted);
 }
 .input:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(47, 93, 76, 0.18);
 }
-.input-error { border-color: #f43f5e; }
+.input-error {
+  border-color: var(--color-error);
+}
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.18);
+}
 
+/* File input styling */
+.input-file {
+  display: block;
+  width: 100%;
+  font-size: 0.875rem;
+  color: var(--forest);
+}
+.input-file::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.4rem 0.875rem;
+  border: 1.5px solid rgba(47, 93, 76, 0.4);
+  border-radius: var(--radius-sm);
+  background: var(--blush);
+  color: var(--forest);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.input-file::file-selector-button:hover {
+  background: var(--sage-bg);
+}
+
+/* Checkbox / radio accent */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--forest);
+}
+
+/* ============================================================
+   6. NAV LINKS
+   ============================================================ */
 .nav-link {
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 500;
-  color: #475569;
+  color: var(--forest);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-link:hover {
+  background: rgba(47, 93, 76, 0.1);
+  color: var(--forest);
+}
+.nav-link.active,
+.nav-link[aria-current="page"] {
+  color: var(--burgundy);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+.nav-link:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   7. LINKS
+   ============================================================ */
+.link {
+  color: var(--burgundy);
+  font-weight: 600;
   text-decoration: none;
 }
-.nav-link:hover { background: #f1f5f9; color: #0f172a; }
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 
-.link { color: #4f46e5; font-weight: 600; text-decoration: none; }
-.link:hover { text-decoration: underline; }
-
+/* ============================================================
+   8. BADGE
+   ============================================================ */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.125rem 0.5rem;
-  border-radius: 9999px;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill);
   font-size: 0.7rem;
-  font-weight: 600;
-  background: #eef2ff;
-  color: #4338ca;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--blush);
+  color: var(--forest);
+  border: 1px solid rgba(47, 93, 76, 0.2);
+}
+
+.badge-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border-color: rgba(47, 93, 76, 0.3);
+}
+
+.badge-private {
+  background: var(--blush);
+  color: var(--color-muted);
+}
+
+/* ============================================================
+   9. FLASH MESSAGES
+   ============================================================ */
+.flash {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+}
+.flash-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border-color: rgba(47, 93, 76, 0.3);
+}
+.flash-danger,
+.flash-error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+  border-color: rgba(139, 26, 26, 0.3);
+}
+.flash-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border-color: rgba(122, 92, 12, 0.3);
+}
+.flash-info {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+  border-color: rgba(26, 74, 92, 0.3);
+}
+.flash-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.65;
+  padding: 0;
+  color: inherit;
+}
+.flash-close:hover { opacity: 1; }
+
+/* ============================================================
+   10. SIDEBAR NAV (profile modules)
+   ============================================================ */
+.sidebar-link {
+  display: block;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--forest);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.sidebar-link:hover {
+  background: rgba(47, 93, 76, 0.1);
+}
+.sidebar-link.active {
+  background: var(--blush);
+  color: var(--burgundy);
+  font-weight: 700;
+}
+.sidebar-link:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   11. STAT / SECTION CARDS (dashboard)
+   ============================================================ */
+.stat-card {
+  background: var(--blush);
+  border: 1px solid rgba(47, 93, 76, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(47, 93, 76, 0.06);
+  transition: box-shadow 0.18s, border-color 0.18s, transform 0.12s;
+  text-decoration: none;
+  color: inherit;
+}
+.stat-card:hover {
+  box-shadow: 0 6px 20px rgba(47, 93, 76, 0.12);
+  border-color: var(--rose);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stat-card:hover { transform: translateY(-2px); }
+}
+.stat-card:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
+.stat-card.sage {
+  background: var(--sage-bg);
+}
+
+/* ============================================================
+   12. PROGRESS BAR
+   ============================================================ */
+.progress-track {
+  height: 0.75rem;
+  width: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--cream);
+  overflow: hidden;
+  border: 1px solid rgba(47, 93, 76, 0.15);
+}
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--forest);
+  transition: width 0.6s ease;
+}
+.progress-fill.complete {
+  background: var(--moss);
+}
+
+/* ============================================================
+   13. AI PANEL
+   ============================================================ */
+.ai-panel {
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--burgundy);
+  background: var(--sage-bg);
+  padding: 1rem;
+}
+
+/* ============================================================
+   14. HEADER / FOOTER (base overrides)
+   ============================================================ */
+.site-header {
+  background: var(--forest);
+  border-bottom: 1px solid rgba(47, 93, 76, 0.5);
+}
+.site-footer {
+  background: var(--forest);
+  color: rgba(255,255,255,0.75);
+  border-top: none;
+}
+.site-footer a:hover {
+  color: #fff;
+}
+
+/* ============================================================
+   15. MOTION / ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   16. FOCUS VISIBLE — global fallback
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
 }

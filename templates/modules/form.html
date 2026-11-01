@@ -1,16 +1,21 @@
 {% extends "modules/_layout.html" %}
 {% block title %}{{ "Edit" if item else "Add" }} {{ module.singular }}{% endblock %}
 {% block module_body %}
-<div class="card p-6 sm:p-8">
-  <h1 class="text-2xl font-bold text-slate-900">{{ "Edit" if item else "Add" }} {{ module.singular }}</h1>
+
+<div class="card-cream p-6 sm:p-8">
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+    {{ "Edit" if item else "Add" }} {{ module.singular }}
+  </h1>
 
   <form method="post" enctype="multipart/form-data" novalidate class="mt-6 space-y-6">
     {{ form.hidden_tag() }}
     {% include "modules/_fields.html" %}
 
     {% if module_name == 'certifications' and item and item.file_path %}
-      <p class="text-sm text-slate-600">Current file:
-        <a href="{{ url_for('static', filename=item.file_path) }}" target="_blank" rel="noopener" class="link">open</a>
+      <p class="text-sm" style="color: var(--color-muted);">
+        Current file:
+        <a href="{{ url_for('static', filename=item.file_path) }}"
+           target="_blank" rel="noopener" class="link">open</a>
       </p>
     {% endif %}
 
@@ -36,6 +41,7 @@
     </div>
   </form>
 </div>
+
 {% endblock %}
 
 {% block scripts %}

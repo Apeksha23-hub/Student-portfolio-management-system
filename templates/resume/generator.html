@@ -3,35 +3,54 @@
 {% block content %}
 <section class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid lg:grid-cols-[340px_1fr] gap-6 items-start">
 
-  <!-- Options. A GET form: choosing options does not change any data. -->
-  <form id="resume-form" method="get" action="{{ url_for('resume.generator') }}" class="card p-6 space-y-6 lg:sticky lg:top-24">
+  <!-- ============================================================
+       OPTIONS PANEL
+       ============================================================ -->
+  <form id="resume-form" method="get" action="{{ url_for('resume.generator') }}"
+        class="card-cream p-6 space-y-6 lg:sticky lg:top-24">
     <input type="hidden" name="customized" value="1">
+
     <div>
-      <h1 class="text-xl font-bold text-slate-900">Resume generator</h1>
-      <p class="text-sm text-slate-500 mt-1">Uses your saved profile. Edit sections in your profile to change the content.</p>
+      <h1 class="text-xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+        Resume generator
+      </h1>
+      <p class="text-sm mt-1" style="color: var(--color-muted);">
+        Uses your saved profile. Edit sections in your profile to change the content.
+      </p>
     </div>
 
+    <!-- Theme chooser -->
     <fieldset>
-      <legend class="text-sm font-semibold text-slate-700">Theme</legend>
+      <legend class="text-sm font-semibold" style="color: var(--forest);">Theme</legend>
       <div class="mt-2 space-y-2">
         {% for key, t in themes.items() %}
-          <label class="flex gap-3 p-3 rounded-lg border cursor-pointer {{ 'border-indigo-500 bg-indigo-50' if key == theme_key else 'border-slate-200 hover:border-slate-300' }}">
-            <input type="radio" name="theme" value="{{ key }}" class="mt-1 theme-radio" {{ 'checked' if key == theme_key }}>
+          <label class="flex gap-3 p-3 rounded-xl border cursor-pointer transition"
+                 style="{% if key == theme_key %}
+                          border-color: var(--burgundy); background: var(--blush);
+                        {% else %}
+                          border-color: rgba(47,93,76,0.2); background: var(--cream);
+                        {% endif %}">
+            <input type="radio" name="theme" value="{{ key }}" class="mt-1 theme-radio shrink-0"
+                   style="accent-color: var(--forest);"
+                   {{ 'checked' if key == theme_key }}>
             <span>
-              <span class="block text-sm font-semibold text-slate-900">{{ t.name }}</span>
-              <span class="block text-xs text-slate-500">{{ t.description }}</span>
+              <span class="block text-sm font-semibold" style="color: var(--forest);">{{ t.name }}</span>
+              <span class="block text-xs" style="color: var(--color-muted);">{{ t.description }}</span>
             </span>
           </label>
         {% endfor %}
       </div>
     </fieldset>
 
+    <!-- Sections -->
     <fieldset>
-      <legend class="text-sm font-semibold text-slate-700">Sections</legend>
+      <legend class="text-sm font-semibold" style="color: var(--forest);">Sections</legend>
       <div class="mt-2 space-y-1.5">
         {% for key, title, has_data in section_options %}
-          <label class="flex items-center gap-2 text-sm {{ 'text-slate-700' if has_data else 'text-slate-400' }}">
-            <input type="checkbox" name="sections" value="{{ key }}" class="h-4 w-4 rounded border-slate-300"
+          <label class="flex items-center gap-2 text-sm"
+                 style="color: {% if has_data %}var(--forest){% else %}var(--color-muted){% endif %};">
+            <input type="checkbox" name="sections" value="{{ key }}"
+                   class="h-4 w-4 rounded" style="accent-color: var(--forest);"
                    {{ 'checked' if has_data and (selected_sections is none or key in selected_sections) }}
                    {{ 'disabled' if not has_data }}>
             {{ title }}{% if not has_data %} <span class="text-xs">(empty)</span>{% endif %}
@@ -40,36 +59,56 @@
       </div>
     </fieldset>
 
+    <!-- Projects -->
     <fieldset>
-      <legend class="text-sm font-semibold text-slate-700">Projects</legend>
-      <p class="text-xs text-slate-500">This theme shows up to {{ max_projects }} (newest first).</p>
+      <legend class="text-sm font-semibold" style="color: var(--forest);">Projects</legend>
+      <p class="text-xs mt-0.5" style="color: var(--color-muted);">
+        This theme shows up to {{ max_projects }} (newest first).
+      </p>
       <div class="mt-2 space-y-1.5">
         {% for p in projects %}
-          <label class="flex items-center gap-2 text-sm text-slate-700">
-            <input type="checkbox" name="projects" value="{{ p.id }}" class="h-4 w-4 rounded border-slate-300"
+          <label class="flex items-center gap-2 text-sm" style="color: var(--forest);">
+            <input type="checkbox" name="projects" value="{{ p.id }}"
+                   class="h-4 w-4 rounded" style="accent-color: var(--forest);"
                    {{ 'checked' if (selected_projects is none and p.include_in_resume) or (selected_projects is not none and p.id in selected_projects) }}>
             {{ p.title }}
           </label>
         {% else %}
-          <p class="text-sm text-slate-400">No projects yet. <a class="link" href="{{ url_for('profile.add_item', module_name='projects') }}">Add one</a></p>
+          <p class="text-sm" style="color: var(--color-muted);">
+            No projects yet.
+            <a class="link" href="{{ url_for('profile.add_item', module_name='projects') }}">Add one</a>
+          </p>
         {% endfor %}
       </div>
     </fieldset>
 
+    <!-- Download -->
     <div class="space-y-2">
-      <button type="submit" formaction="{{ url_for('resume.download') }}" formtarget="_blank" class="btn-primary w-full">Download PDF</button>
-      <p class="text-xs text-slate-500">PDF engine: <b>{{ pdf_engine }}</b>{% if pdf_engine != "WeasyPrint" %} (opens a print-ready page; choose "Save as PDF"){% endif %}</p>
+      <button type="submit" formaction="{{ url_for('resume.download') }}" formtarget="_blank"
+              class="btn-primary w-full">
+        Download PDF
+      </button>
+      <p class="text-xs" style="color: var(--color-muted);">
+        PDF engine: <strong>{{ pdf_engine }}</strong>
+        {% if pdf_engine != "WeasyPrint" %} (opens a print-ready page; choose "Save as PDF"){% endif %}
+      </p>
     </div>
   </form>
 
-  <!-- Live preview -->
-  <div class="card overflow-hidden">
-    <div class="px-4 py-2 border-b border-slate-200 text-sm text-slate-500 flex justify-between">
+  <!-- ============================================================
+       LIVE PREVIEW
+       ============================================================ -->
+  <div class="card-cream overflow-hidden">
+    <div class="px-4 py-2 flex justify-between text-sm"
+         style="border-bottom: 1px solid rgba(47,93,76,0.15); color: var(--color-muted);">
       <span>Live preview</span><span>A4</span>
     </div>
-    <iframe id="resume-preview" title="Resume preview" class="w-full bg-slate-200" style="height: 1180px;"
+    <iframe id="resume-preview" title="Resume preview"
+            class="w-full"
+            style="height: 1180px; background: #fff;"
             src="{{ url_for('resume.preview') }}{{ '?' ~ query if query }}"></iframe>
   </div>
+
 </section>
 {% endblock %}
 
@@ -77,8 +116,8 @@
 <script>
   // Refresh the preview iframe whenever an option changes.
   (function () {
-    var form = document.getElementById("resume-form");
-    var frame = document.getElementById("resume-preview");
+    var form   = document.getElementById("resume-form");
+    var frame  = document.getElementById("resume-preview");
     var previewUrl = "{{ url_for('resume.preview') }}";
 
     form.addEventListener("change", function (event) {

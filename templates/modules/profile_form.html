@@ -1,18 +1,29 @@
 {% extends "modules/_layout.html" %}
 {% block title %}Personal profile{% endblock %}
 {% block module_body %}
-<div class="card p-6 sm:p-8">
+
+<div class="card-cream p-6 sm:p-8">
+
+  <!-- Header: avatar + title -->
   <div class="flex items-center gap-4">
     {% if profile.photo_path %}
-      <img src="{{ url_for('static', filename=profile.photo_path) }}" alt="Profile photo" class="h-16 w-16 rounded-full object-cover border border-slate-200">
+      <img src="{{ url_for('static', filename=profile.photo_path) }}"
+           alt="Profile photo"
+           class="h-16 w-16 rounded-full object-cover"
+           style="border: 2px solid var(--rose);">
     {% else %}
-      <div class="h-16 w-16 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-bold">
+      <div class="h-16 w-16 rounded-full flex items-center justify-center text-xl font-bold shrink-0"
+           style="background: var(--blush); color: var(--forest); border: 2px solid var(--rose);">
         {{ current_user.name[:1]|upper }}
       </div>
     {% endif %}
     <div>
-      <h1 class="text-2xl font-bold text-slate-900">Personal profile</h1>
-      <p class="text-sm text-slate-500">{{ current_user.email }} (login email, not editable)</p>
+      <h1 class="text-2xl font-bold" style="font-family: var(--font-heading); color: var(--forest);">
+        Personal profile
+      </h1>
+      <p class="text-sm" style="color: var(--color-muted);">
+        {{ current_user.email }} (login email, not editable)
+      </p>
     </div>
   </div>
 
@@ -29,7 +40,9 @@
 
     {{ form.submit(class="btn-primary") }}
   </form>
+
 </div>
+
 {% endblock %}
 
 {% block scripts %}
