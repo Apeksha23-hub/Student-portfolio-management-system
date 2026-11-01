@@ -15,9 +15,9 @@ from app.models import Profile, User
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _get_slug(app, user):
+def _get_slug(app, user_dict):
     with app.app_context():
-        profile = Profile.query.filter_by(user_id=user.id).first()
+        profile = Profile.query.filter_by(user_id=user_dict["id"]).first()
         return profile.public_slug
 
 
@@ -41,10 +41,10 @@ class TestPublicPortfolio:
 
     def test_private_portfolio_returns_404(self, app, client, user_a,
                                            auth_client_a):
-        # Ensure the profile is private.
+        # Ensure the profile is private (submit present, is_public absent = unchecked).
         auth_client_a.post(
             "/share",
-            data={},            # is_public unchecked
+            data={"submit": "Save"},   # is_public absent = unchecked checkbox
             follow_redirects=False,
         )
         slug = _get_slug(app, user_a)
@@ -59,7 +59,7 @@ class TestPublicPortfolio:
         """The slug must not be the numeric user id (prevents enumeration)."""
         slug = _get_slug(app, user_a)
         with app.app_context():
-            u = User.query.filter_by(email="usera@test.com").first()
+            u = User.query.filter_by(email=user_a["email"]).first()
             assert slug != str(u.id), "Slug must not be the plain user ID!"
 
     def test_public_portfolio_contains_user_name(self, app, client, user_a,
@@ -84,17 +84,17 @@ class TestShareToggle:
         )
         assert resp.status_code == 302
         with app.app_context():
-            profile = Profile.query.filter_by(user_id=user_a.id).first()
+            profile = Profile.query.filter_by(user_id=user_a["id"]).first()
             assert profile.is_public is True
 
     def test_share_toggle_makes_portfolio_private(self, app, auth_client_a, user_a):
         # First make it public.
         auth_client_a.post("/share", data={"is_public": "y"}, follow_redirects=False)
-        # Now toggle back to private (unchecked checkbox = field absent).
-        resp = auth_client_a.post("/share", data={}, follow_redirects=False)
+        # Now toggle back to private (submit present, is_public absent = unchecked).
+        resp = auth_client_a.post("/share", data={"submit": "Save"}, follow_redirects=False)
         assert resp.status_code == 302
         with app.app_context():
-            profile = Profile.query.filter_by(user_id=user_a.id).first()
+            profile = Profile.query.filter_by(user_id=user_a["id"]).first()
             assert profile.is_public is False
 
     def test_share_page_requires_login(self, client):

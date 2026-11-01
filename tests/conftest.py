@@ -6,10 +6,14 @@ The app is created fresh for each test session using TestConfig:
     across threads/calls (avoids "no such table" errors)
   - CSRF disabled so test POSTs don't need tokens
   - GEMINI_API_KEY empty so no network calls happen
+
+IMPORTANT: user_a / user_b fixtures return plain dicts
+  {"id": int, "email": str, "name": str, "slug": str}
+instead of ORM objects, so that no SQLAlchemy session is needed
+outside of an app_context (avoids DetachedInstanceError).
 """
 import pytest
 from sqlalchemy import StaticPool
-from sqlalchemy.pool import StaticPool as SAStaticPool
 
 from app import create_app, db as _db
 from app.models import (
@@ -76,14 +80,16 @@ def login_user(client, email, password="Password1!"):
 
 
 # ---------------------------------------------------------------------------
-# Pre-built user fixtures
+# Pre-built user fixtures  (return plain dicts, NOT ORM objects)
 # ---------------------------------------------------------------------------
 
 def _create_user_with_data(app, db_session, name, email, password="Password1!",
                             is_public=False):
     """
     Create a user with a profile row and one record in each module.
-    Returns the User object.
+    Returns a plain dict: {"id": int, "email": str, "name": str, "slug": str}.
+    All DB work happens inside the session passed in (which is already inside
+    an app_context).
     """
     from datetime import date
     from app.utils import generate_unique_slug
@@ -93,9 +99,10 @@ def _create_user_with_data(app, db_session, name, email, password="Password1!",
     db_session.add(user)
     db_session.flush()
 
+    slug = generate_unique_slug(name)
     profile = Profile(
         user_id=user.id,
-        public_slug=generate_unique_slug(name),
+        public_slug=slug,
         headline="Test headline",
         is_public=is_public,
     )
@@ -141,19 +148,21 @@ def _create_user_with_data(app, db_session, name, email, password="Password1!",
     ))
 
     db_session.commit()
-    return user
+
+    # Return plain dict — safe to use outside any app_context.
+    return {"id": user.id, "email": email, "name": name, "slug": slug}
 
 
 @pytest.fixture()
 def user_a(app, db):
-    """A fully set-up user (User A)."""
+    """A fully set-up user (User A). Returns a plain dict."""
     with app.app_context():
         return _create_user_with_data(app, db.session, "User A", "usera@test.com")
 
 
 @pytest.fixture()
 def user_b(app, db):
-    """A second user (User B) — used to test ownership enforcement."""
+    """A second user (User B). Returns a plain dict."""
     with app.app_context():
         return _create_user_with_data(app, db.session, "User B", "userb@test.com")
 
@@ -161,7 +170,7 @@ def user_b(app, db):
 @pytest.fixture()
 def auth_client_a(client, user_a):
     """A test client already logged in as User A."""
-    login_user(client, "usera@test.com")
+    login_user(client, user_a["email"])
     return client
 
 
@@ -171,5 +180,5 @@ def auth_client_b(app, client, user_a, user_b):
     A test client already logged in as User B.
     user_a is requested so both users exist in the DB before login.
     """
-    login_user(client, "userb@test.com")
+    login_user(client, user_b["email"])
     return client

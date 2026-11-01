@@ -148,7 +148,7 @@ class TestAIDailyLimit:
         limit = app.config["AI_DAILY_LIMIT"]
 
         with app.app_context():
-            row = AIUsage(user_id=user_a.id, date=date.today(), count=limit)
+            row = AIUsage(user_id=user_a["id"], date=date.today(), count=limit)
             db.session.add(row)
             db.session.commit()
 

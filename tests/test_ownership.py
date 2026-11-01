@@ -23,11 +23,11 @@ MODULES = [
 ]
 
 
-def _first_id(app, model, user):
-    """Return the id of the first record owned by user, inside the app context."""
+def _first_id(app, model, user_dict):
+    """Return the id of the first record owned by user_dict, inside the app context."""
     with app.app_context():
-        record = model.query.filter_by(user_id=user.id).first()
-        assert record is not None, f"No {model.__name__} found for {user.name}"
+        record = model.query.filter_by(user_id=user_dict["id"]).first()
+        assert record is not None, f"No {model.__name__} found for {user_dict['name']}"
         return record.id
 
 
